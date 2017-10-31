@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" type="text/css" href="charts.css">
+	<script src="//d3js.org/d3.v4.min.js"></script>
+</head>
+
+<body>
+	<script src="charts.js"></script>
+	<svg class="bar-chart"></svg>
+	<svg class="donut-chart"></svg>
+
+	<script>
+		
+		//wages and tips
+		var barHeight = 30;
+
+		var margin = {top:30, right:20, bottom:30, left:20},
+					width = 500-margin.left-margin.right,
+					height = 250-margin.top-margin.bottom;
+
+		var wageData = [{name: "Yes", value: .05},
+			{name: "No", value: .69},
+			{name: "Salaried - doesn't apply", value: .07},
+			{name: "Don't know", value: .19}];
+
+		var horiz_bar_chart = d3.select(".bar-chart")
+			.attr("width", width);
+
+		var x = d3.scaleLinear()
+			.domain([0, 1])
+			.range([0, width]);
+
+		var wageColor = d3.scaleOrdinal()
+			.domain(["Yes", "No", "Salaried - doesn't apply", "Don't know"])
+			.range(["steelblue", "teal", "orange", d3.rgb(95,13,10)]);
+
+		var horiz_bar = horiz_bar_chart.selectAll("g")
+				.data(wageData)
+			.enter().append("g")
+				.attr("transform", function(d, i) {return "translate(0," + i * barHeight + ")"});
+
+		horiz_bar.append("rect")
+			.attr("width", function(d) {return x(d.value);})
+			.attr("height", barHeight-1)
+			.attr("fill", function(d) {return wageColor(d.name);});
+
+		horiz_bar.append("text")
+			.attr("x", function(d) {return x(d.value) + 30;})
+			.attr("y", barHeight /2)
+			.attr("dy", ".35em")
+			.text(function(d) {return d.value;});
+
+		//advancement opportunities
+		var width2 = 960,
+			height2= 500,
+			radius = 250;
+
+		var advancementData = [{name: "Excellent", value: .09},
+			{name: "Good", value: .14},
+			{name: "Fair", value: .36},
+			{name: "Poor", value: .18},
+			{name: "Very Poor", value: .23}];
+
+		var donut_color = d3.scaleOrdinal()
+					.domain(["Excellent", "Good", "Fair", "Poor", "Very Poor"])
+					.range(["steelblue", "teal", "orange", d3.rgb(95,13,10), "black"]);
+
+		var arc = d3.arc()
+			.outerRadius(radius-10)
+			.innerRadius(radius-70);
+
+		var pie = d3.pie()
+			.sort(null)
+			.value(function(d) {return d.value;});
+
+		var donut_chart = d3.select(".donut-chart")
+				.attr("width", width2)
+				.attr("height", height2)
+			.append("g")
+				.attr("translate", "translate(" + width2/2 + "," + height/2 + ")");
+
+		var donut_segments = donut_chart.selectAll(".arc")	
+						.data(pie(advancementData))
+					.enter().append("g")
+						.attr("class", "arc");
+
+		donut_segments.append("path")
+					.attr("d", arc)
+					.style("fill", function(d) {return donut_color(d.name);});
+
+		donut_segments.append("text")
+					.attr("transform", function(d) {return "translate(" + arc.centroid(d) + ")";})
+					.attr("dy", ".35em")
+					.text(function(d) {return d.value;});
+
+	</script>
+</body>
+
+</html>
