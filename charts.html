@@ -10,6 +10,7 @@
 	<script src="charts.js"></script>
 	<svg class="bar-chart"></svg>
 	<svg class="donut-chart"></svg>
+	<svg class="vertical-bar-chart"></svg>
 
 	<script>
 		
@@ -94,6 +95,52 @@
 					.attr("transform", function(d) {return "translate(" + arc.centroid(d) + ")";})
 					.attr("dy", ".35em")
 					.text(function(d) {return d.value;});
+
+		//workplace safety
+		var safetyData = [{name: "Excellent", value: .09},
+			{name: "Good", value: .14},
+			{name: "Fair", value: .36},
+			{name: "Poor", value: .18},
+			{name: "Very Poor", value: .23}];
+
+		var width3 = "250",
+			height3 = "250";
+
+		var vertical_x = d3.scaleBand().rangeRound([0, width3]).padding(0.1),
+			vertical_y = d3.scaleLinear().rangeRound([height3, 0]);
+
+		var vertical_bar_chart = d3.select(".vertical-bar-chart")
+							.attr("width", width3)
+							.attr("height", height3 + 10)
+
+		vertical_x.domain(["Excellent", "Good", "Fair", "Poor", "Very Poor"]);
+		vertical_y.domain([0, 1]);
+
+		vertical_bar_chart.append("g")
+			.attr("class", "axis axis--x")
+			.attr("transform", "translate(0," + height3 + ")")
+			.call(d3.axisBottom(vertical_x));
+
+		vertical_bar_chart.append("g")
+				.attr("class", "axis axis--y")
+				.call(d3.axisLeft(vertical_y).ticks(.1))
+			.append("text")
+				.attr("transform", "rotate(-90)")
+				.attr("y", 6)
+				.attr("dy", ".71em")
+				.attr("text-anchor", "end");
+
+		var vertical_bar = vertical_bar_chart.selectAll(".bar")
+						.data(safetyData)
+						.enter().append("rect")
+							.attr("class", "bar")
+							.attr("x", function(d) {return vertical_x(d.name);})
+							.attr("y", function(d) {return vertical_y(d.value);})
+							.attr("width", vertical_x.bandwidth())
+							.attr("fill", "steelblue")
+							.attr("height", function(d) {return height3 - vertical_y(d.value);});
+
+		
 
 	</script>
 </body>
