@@ -10,8 +10,7 @@
 	<script src="charts.js"></script>
 	<svg class="bar-chart"></svg>
 	<svg class="donut-chart"></svg>
-	<svg class="vertical-bar-chart"></svg>
-
+	<svg class = "vertical-bar-chart"></svg>
 	<script>
 		
 		//wages and tips
@@ -54,9 +53,9 @@
 			.text(function(d) {return d.value;});
 
 		//advancement opportunities
-		var width2 = 960,
-			height2= 500,
-			radius = 250;
+		var width2 = 500,
+			height2= 250,
+			radius = Math.min(width2, height2)/2;
 
 		var advancementData = [{name: "Excellent", value: .09},
 			{name: "Good", value: .14},
@@ -80,7 +79,7 @@
 				.attr("width", width2)
 				.attr("height", height2)
 			.append("g")
-				.attr("translate", "translate(" + width2/2 + "," + height/2 + ")");
+				.attr("transform", "translate(" + width2/2 + "," + height2/2 + ")");
 
 		var donut_segments = donut_chart.selectAll(".arc")	
 						.data(pie(advancementData))
@@ -140,7 +139,7 @@
 							.attr("fill", "steelblue")
 							.attr("height", function(d) {return height3 - vertical_y(d.value);});
 
-		
+
 
 	</script>
 </body>
