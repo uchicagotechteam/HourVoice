@@ -4,29 +4,87 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="charts.css">
 	<script src="//d3js.org/d3.v4.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 </head>
 
 <body>
 	<script src="charts.js"></script>
-	<svg class="bar-chart"></svg>
+	<svg class="backwages"></svg>
 	<svg class="donut-chart"></svg>
 	<svg class = "vertical-bar-chart"></svg>
 	<script>
-		
-		//wages and tips
+		//company data
+		var companies = 'http://stopwagetheft.stanford.edu/api/v1/cases?&limit=10&columns=employees_owed_backwages, legal_name,latitude,longitude';
+		var company_data = new Array();
+		$.getJSON(companies, function(data) {
+			$.each(data["data"], function(i, company) {
+				company_data.push(company);
+				console.log(company);
+			})
+
+			var backwage_width = "1000",
+				backwage_height = "500";
+
+			var backwage_x = d3.scaleBand().rangeRound([0, backwage_width]).padding(0.1),
+				backwage_y = d3.scaleLinear().rangeRound([backwage_height, 0]);
+
+			backwage_x.domain(company_data.map(function(d) {return d["legal_name"];}));
+			backwage_y.domain([0, d3.max(company_data, function(d) {return d["employees_owed_backwages"];})]);
+
+			var backwage_color = d3.scaleOrdinal(d3.schemeCategory10);
+
+
+			var backwage_bar_chart = d3.select(".backwages")
+								.attr("width", backwage_width)
+								.attr("height", 550);
+
+			backwage_bar_chart.append("g")
+				.attr("class", "axis axis--x")
+				.attr("transform", "translate(0," + backwage_height + ")")
+				.call(d3.axisBottom(backwage_x));
+
+			backwage_bar_chart.append("g")
+					.attr("class", "axis axis--y")
+					.call(d3.axisLeft(backwage_y).ticks(1))
+				.append("text")
+					.attr("transform", "rotate(-90)")
+					.attr("y", 6)
+					.attr("dy", ".71em")
+					.attr("text-anchor","end");
+
+			backwage_bar_chart.selectAll(".bar")
+				.data(company_data)
+				.enter().append("rect")
+					.attr("class", "bar")
+					.attr("x", function(d) {return backwage_x(d["legal_name"]);})
+					.attr("y", function(d) {return backwage_y(d["employees_owed_backwages"]);})
+					.attr("width", backwage_x.bandwidth())
+					.attr("fill", function(d) {return backwage_color(d["legal_name"]);})
+					.attr("height", function(d) {return backwage_height - backwage_y(d["employees_owed_backwages"]);});
+		});
+
+		//food inspection data
+		$.ajax({
+			url: 'https://data.cityofchicago.org/resource/cwig-ma7x.json',
+			type: "GET",
+			data: {
+				"$limit": 10,
+				"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
+			}
+		}).done(function(data) {
+			
+		});
+
+/*
 		var barHeight = 30;
 
 		var margin = {top:30, right:20, bottom:30, left:20},
 					width = 500-margin.left-margin.right,
 					height = 250-margin.top-margin.bottom;
 
-		var wageData = [{name: "Yes", value: .05},
-			{name: "No", value: .69},
-			{name: "Salaried - doesn't apply", value: .07},
-			{name: "Don't know", value: .19}];
-
 		var horiz_bar_chart = d3.select(".bar-chart")
 			.attr("width", width);
+
 
 		var x = d3.scaleLinear()
 			.domain([0, 1])
@@ -50,9 +108,10 @@
 			.attr("x", function(d) {return x(d.value) + 30;})
 			.attr("y", barHeight /2)
 			.attr("dy", ".35em")
-			.text(function(d) {return d.value;});
+			.text(function(d) {return d.value;});*/
 
 
+/*
 
 		//advancement opportunities
 		var width2 = 500,
@@ -145,9 +204,7 @@
 							.attr("width", vertical_x.bandwidth())
 							.attr("fill", "steelblue")
 							.attr("height", function(d) {return height3 - vertical_y(d.value);});
-
-
-
+*/
 	</script>
 </body>
 
