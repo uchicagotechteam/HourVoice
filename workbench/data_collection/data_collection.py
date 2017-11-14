@@ -74,8 +74,14 @@ biz_lons = map(roundMap, map(float, filter(isFloat, getCSVDataByHeader(biz_data,
 food_lats = map(roundMap, map(float, getJSONDataByHeader(load_food, 'latitude')))
 food_lons = map(roundMap, map(float, getJSONDataByHeader(load_food, 'longitude')))
 
-
 def getCrossRefedEmployers():
+	emps = []
+	for i in range(len(biz_licenses)):
+		if (biz_licenses[i] in food_emps):
+			emps.append(biz_licenses[i])
+	return emps
+
+def getCrossRefedLocations():
 	emps = []
 	for i in range(len(biz_lats)):
 		if (biz_lats[i] in food_lats) and (biz_lons[i] in food_lons):
