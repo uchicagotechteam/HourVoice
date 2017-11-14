@@ -1,5 +1,4 @@
-import json, urllib
-import pprint
+import json, urllib, csv
 
 #gets data from the DoL cases via stanford's stopwagetheft
 url = "http://stopwagetheft.stanford.edu/api/v1/cases"
@@ -11,71 +10,76 @@ loadedData = j['data']
 injury_data = open("severeinjury.csv", 'r') 
 load_data = injury_data.read()
 split_lines_data = load_data.split('\n')
-header = split_lines_data[0].split(',')
-csv_list = []
+osha_header = split_lines_data[0].split(',')
 
 food_data = open("cityofchicagofood.json", 'r')
 load_food = json.loads(food_data.read())
 
-bizlicense = open("bizlicense.json", 'r')
-loadbiz = json.loads(bizlicense.read())
+bizlicense = []
+with open("Business_Licenses.csv", 'r') as csvfile:
+	reader = csv.reader(csvfile, delimiter='"')
+	for row in reader:
+		bizlicense.append(row)
+biz_header = bizlicense[0][0].split(',')
 
 # separates the key info by commas
-for i in range(len(split_lines_data)):
-	csv_list.append(split_lines_data[i].split(','))
+def splitCSV(data):
+	csv_list = []
+	for i in range(len(data)):
+		if (len(data[i][0].split(',')) == len(biz_header)):
+			csv_list.append(data[i][0].split(','))
+	return csv_list
 
-# i tried to fix some issues with OSHA's poorly formatted csv, 
-# but doesn't work yet
-for i in range(len(split_lines_data)):
-	for j in range(len(csv_list[i])-1):
-		if csv_list[i][j].find('/n') != -1:
-			''.join(csv_list[i][j:j+2])
-
-#retrieves DoL data by name
-def getDOLDataByHeader(hName):
-	data = []
-	for i in range(len(loadedData)):
-		data.append(loadedData[i][hName])
-	return data
+osha_data = splitCSV(split_lines_data)
+biz_data = splitCSV(bizlicense)
 
 # returns the index of the desired header
-def getOSHAHeaderIndex(hName):
-	for i in range(0, len(header)):
-		if header[i] == hName:
+def getHeaderIndex(headers, header):
+	for i in range(0, len(headers)):
+		if headers[i] == header:
 			return i
 
-# returns a list of the value filed under a given header for every case
-# 17000 is a filler number that represents around where the bad formatting starts
-def getOSHADataByHeader(hName):
+def getCSVDataByHeader(data, headers, header):
 	col = []
-	for i in range(17000):
-		col.append(csv_list[i][getOSHAHeaderIndex(hName)])
+	for i in range(len(data)):
+		col.append(data[i][getHeaderIndex(headers, header)])
 	return col
 
-def getJSONDataByHeader(fName, hName):
-	data = []
-	for i in range(len(fName)):
-		data.append(fName[i][hName])
-	return data
+def getJSONDataByHeader(data, header):
+	d = []
+	for i in range(len(data)):
+		if header in data[i]:
+			d.append(data[i][header])
+	return d
 
-dol_emps  = getDOLDataByHeader("legal_name")
-osha_emps = getOSHADataByHeader('"Employer"')
-food_emps = getJSONDataByHeader(load_food, "dba_name")
-biz_names = getJSONDataByHeader(loadbiz, "doing_business_as_name")
+def toLower(data):
+	return data.lower()
 
-def getAllEmployers():
-	all_employers = []
-	all_employers.append(dol_emps)
-	all_employers.append(osha_emps)
-	all_employers.append(food_emps)
-	all_employers.append(biz_names)
-	return all_employers
+def roundMap(data):
+	return round(data, 6)
+
+def isFloat(str):
+	try:
+	 	float(str)
+		return True
+	except ValueError:
+		return False
+
+dol_emps  = getJSONDataByHeader(loadedData, "legal_name")
+osha_emps = getCSVDataByHeader(osha_data, osha_header, '"Employer"')
+biz_licenses = map(toLower, getCSVDataByHeader(biz_data, biz_header, "DOING BUSINESS AS NAME"))
+food_emps = map(toLower, getJSONDataByHeader(load_food, 'dba_name'))
+biz_lats = map(roundMap, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LATITUDE")[1:])))
+biz_lons = map(roundMap, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:])))
+food_lats = map(roundMap, map(float, getJSONDataByHeader(load_food, 'latitude')))
+food_lons = map(roundMap, map(float, getJSONDataByHeader(load_food, 'longitude')))
+
 
 def getCrossRefedEmployers():
 	emps = []
-	for i in range(len(food_emps)):
-		if food_emps[i] in dol_emps:
-			emps.append(food_emps + str(i))
-	print emps
+	for i in range(len(biz_lats)):
+		if (biz_lats[i] in food_lats) and (biz_lons[i] in food_lons):
+			emps.append(biz_licenses[i])
+	return emps
 
-getCrossRefedEmployers()
+print getCrossRefedEmployers()
