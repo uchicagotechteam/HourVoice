@@ -23,6 +23,8 @@ with open("severeinjury.csv", 'r') as csvfile:
 		osha_data.append(row)
 osha_header = osha_data[0]
 
+outputdata = open("output.txt", 'w')
+
 # separates the key info by commas
 def splitCSV(data):
 	csv_list = []
@@ -58,8 +60,11 @@ def getJSONDataByHeader(data, header):
 def toLower(data):
 	return data.lower()
 
-def roundMap(data):
+def roundMapOSHA(data):
 	return round(data, 2)
+
+def roundMapFood(data):
+	return round(data, 6)
 
 def isFloat(str):
 	try:
@@ -72,10 +77,12 @@ dol_emps     = getJSONDataByHeader(loadedData, "legal_name")
 osha_emps    = map(toLower,  getCSVDataByHeader(osha_data, osha_header, 'Employer'))
 biz_licenses = map(toLower , getCSVDataByHeader(biz_data, biz_header, "DOING BUSINESS AS NAME"))
 food_emps    = map(toLower , getJSONDataByHeader(load_food, 'dba_name'))
-biz_lats     = map(roundMap, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LATITUDE")[1:])))
-biz_lons     = map(roundMap, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:])))
-food_lats    = map(roundMap, map(float, getJSONDataByHeader(load_food, 'latitude')))
-food_lons    = map(roundMap, map(float, getJSONDataByHeader(load_food, 'longitude')))
+biz_lats_for_OSHA = map(roundMapOSHA, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LATITUDE")[1:])))
+biz_lons_for_OSHA = map(roundMapOSHA, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:])))
+biz_lats_for_food = map(roundMapFood, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LATITUDE")[1:])))
+biz_lons_for_food = map(roundMapFood, map(float, filter(isFloat, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:])))
+food_lats    = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'latitude')))
+food_lons    = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'longitude')))
 osha_lats    = getCSVDataByHeader(osha_data, osha_header, 'Latitude')[1:]
 osha_lons    = getCSVDataByHeader(osha_data, osha_header, 'Longitude')[1:]
 osha_cities  = getCSVDataByHeader(osha_data, osha_header, 'City')
@@ -95,28 +102,31 @@ def getOSHAChicago():
 # we'd run disambiguation down here
 def getCrossRefedEmployers():
 	emps = []
-	print "getting cross refed employers"
 	for f in food_emps:
 		if (f in set(osha_emps)):
 			emps.append(f)
 	return emps
 
 def countUpViolators():
-	crossRefed = getCrossRefedLocations()
+	cross_refed = getCrossRefedLocations()
 	final = set([])
-	for c in crossRefed:
-		final.add(c + " " + str(crossRefed.count(c)))
-	print '\n'.join(list(final))
+	names = []
+	for item in cross_refed:
+		names.append(item[0])
+	for i in range(len(cross_refed)):
+		final.add((biz_data[cross_refed[i][1]],
+			names.count(cross_refed[i][0])))
+	print list(final)
 
 def getCrossRefedLocations():
 	locs = []
-	(chilats, chilons) = getOSHAChicago()
-	for i in range(len(chilats)):
-		if (chilats[i] in set(biz_lats)) and (chilons[i] in set(biz_lons)):
-			locs.append(osha_emps[i])
-	for i in range(len(food_lats)):
-		if (food_lats[i] in set(biz_lats)) and (food_lons[i] in set(biz_lons)):
-			locs.append(food_emps[i])
+	(oshalats, oshalons) = getOSHAChicago()
+	for i in range(len(biz_lats_for_OSHA)):
+		if (biz_lats_for_OSHA[i] in set(oshalats)) and (biz_lons_for_OSHA[i] in set(oshalons)):
+			locs.append((biz_licenses[i], i))
+	for i in range(len(biz_lats_for_food)):
+		if (biz_lats_for_food[i] in set(food_lats)) and (biz_lons_for_food[i] in set(food_lons)):
+			locs.append((biz_licenses[i], i))
 	return locs
 
 countUpViolators()
