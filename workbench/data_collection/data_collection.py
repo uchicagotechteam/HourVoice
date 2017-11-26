@@ -33,7 +33,7 @@ def splitCSV(data):
 			csv_list.append(d[0].split(','))
 	return csv_list
 
-biz_data = splitCSV(bizlicense)
+biz_data = splitCSV(bizlicense[:500])
 
 # returns the index of the desired header
 def getHeaderIndex(headers, header):
@@ -67,11 +67,11 @@ def roundMapFood(data):
 	return round(data, 6)
 
 def isFloat(str):
-	try:
-	 	float(str)
-		return True
-	except ValueError:
-		return False
+        try:
+                float(str)
+                return True
+        except ValueError:
+                return False
 
 dol_emps     = getJSONDataByHeader(loadedData, "legal_name")
 osha_emps    = map(toLower,  getCSVDataByHeader(osha_data, osha_header, 'Employer'))
@@ -86,6 +86,9 @@ food_lons    = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'long
 osha_lats    = getCSVDataByHeader(osha_data, osha_header, 'Latitude')[1:]
 osha_lons    = getCSVDataByHeader(osha_data, osha_header, 'Longitude')[1:]
 osha_cities  = getCSVDataByHeader(osha_data, osha_header, 'City')
+violation_info = getJSONDataByHeader(load_food, 'violations')
+risk_info = getJSONDataByHeader(load_food,'risk')
+food_inspection_result = getJSONDataByHeader(load_food, 'results')
 
 def getOSHAChicago():
 	indices = []
@@ -95,9 +98,9 @@ def getOSHAChicago():
 		if (osha_cities[i] == 'CHICAGO'):
 			indices.append(i)
 	for j in indices:
-		chilons.append(osha_lons[j])
-		chilats.append(osha_lats[j])
-	return (map(float, chilats), (map(float, chilons)))
+		chilons.append((osha_lons[j],j))
+		chilats.append((osha_lats[j],j))
+	return (chilats, chilons)
 
 # we'd run disambiguation down here
 def getCrossRefedEmployers():
@@ -109,24 +112,40 @@ def getCrossRefedEmployers():
 
 def countUpViolators():
 	cross_refed = getCrossRefedLocations()
-	final = set([])
 	names = []
+	final1 = []
+	final = ""
 	for item in cross_refed:
 		names.append(item[0])
-	for i in range(len(cross_refed)):
-		final.add((biz_data[cross_refed[i][1]],
-			names.count(cross_refed[i][0])))
-	print list(final)
+	for i in cross_refed:
+		final1.append([biz_data[i[1]] + [str(names.count(i[0]))] + osha_data[i[2]] + [str(i[3])]])
+	for j in final1:
+		final = final + (','.join(j[0])) + '\n'
+	return final
 
 def getCrossRefedLocations():
 	locs = []
 	(oshalats, oshalons) = getOSHAChicago()
+	oshalaforcomp = []
+	oshaloforcomp = []
+	oshadata = []
+	for i in oshalats:
+		oshalaforcomp.append(float(i[0]))
+		oshadata.append(osha_data[i[1]])
+	for j in oshalons:
+		oshaloforcomp.append(float(j[0]))
 	for i in range(len(biz_lats_for_OSHA)):
-		if (biz_lats_for_OSHA[i] in set(oshalats)) and (biz_lons_for_OSHA[i] in set(oshalons)):
-			locs.append((biz_licenses[i], i))
+		if (biz_lats_for_OSHA[i] in oshalaforcomp) and (biz_lons_for_OSHA[i] in set(oshaloforcomp)):
+			for j in range(len(oshadata)):
+				if oshadata[j][9] == biz_lats_for_OSHA[i]:
+					oshaindex = j
+				else:
+					oshaindex = 0
+			locs.append((biz_licenses[i], i, oshaindex, 00))
 	for i in range(len(biz_lats_for_food)):
 		if (biz_lats_for_food[i] in set(food_lats)) and (biz_lons_for_food[i] in set(food_lons)):
-			locs.append((biz_licenses[i], i))
+			locs.append((biz_licenses[i], i, 0 ,i))
 	return locs
 
-countUpViolators()
+		
+outputdata.write(countUpViolators())
