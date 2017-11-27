@@ -214,13 +214,9 @@ header.light nav ul li a:hover{
 
 
 
-
-
-
-
 /*    user-reviews    */
 .user-reviews{
-    margin-top: 100px;
+    margin-top: 200px;
 }
 
 .user-reviews ul{
@@ -239,10 +235,6 @@ header.light nav ul li a:hover{
     margin-left: 0;
 }
 
-.user-reviews ul li .quotes{
-    margin-right: 10px;
-}
-
 .user-reviews ul li p{
     color: #838181;
     font-family: "Verdana";
@@ -252,6 +244,7 @@ header.light nav ul li a:hover{
     padding-bottom: 30px;
     margin-bottom: 20px;
     border-bottom: 1px solid #ecebeb;
+    margin-left: 20px;
     position: relative;
 }
 
