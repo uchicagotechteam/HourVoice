@@ -36,15 +36,10 @@ h5, h6          { font-weight: bolder }
 }
 
 
-
-
-
-
-
-/*    Billboard    */
-.billboard{
+/*    Company Info    */
+.company-info{
     width: 100%;
-    height: 690px;
+    height: 400px;
     position: relative;
 }
 
@@ -60,54 +55,39 @@ h5, h6          { font-weight: bolder }
 }
 
 
-.billboard .caption{
+.company-info .caption{
     margin-top: 130px;
     text-align: center;
+    color: black;
 }
 
-.billboard .caption.light{
-    color: #fff;
-}
-
-.billboard .caption h1{
+.company-info .caption h1{
     font-family: "Verdana";
     font-size: 50px;
     font-weight: bold; 
     margin-bottom: 30px;
 }
 
-.billboard .caption.light h1{
-    color: #fff;
-}
-
-.billboard .caption p{
+.company-info .caption p{
     font-family: "Verdana";
     font-size: 18px;
     margin-bottom: 30px;
+    color: "black";
 }
 
-.billboard .caption.light p{
-    color: #fff;
-}
-
-.billboard .caption hr{
+.company-info .caption hr{
     display: inline-block;
     height: 1px;
     width: 30px;
     border: 0!important;   
     margin: 0;
     padding: 0;
-}
-
-.billboard .caption.light hr{
-    background: #fff;
+    background: "black";
 }
 
 
 
-
-
-/*    header    */
+/*    Header    */
 header{
     width: 100%;
     height: 125px;
@@ -143,7 +123,7 @@ header nav ul li a{
 }
 
 header.light nav ul li a{  
-    color: #fff;
+    color: "black";
 }
 
 header.light nav ul li a:hover{
@@ -155,12 +135,12 @@ header.light nav ul li a:hover{
 
 
 
-/*    Services    */
-.services ul{
+/*    visualizations    */
+.visualizations ul{
     margin-top: 100px;
 }
 
-.services ul li{
+.visualizations ul li{
     list-style: none;
     display: block;
     width: 313px;
@@ -169,11 +149,11 @@ header.light nav ul li a:hover{
     text-align: center;
 }
 
-.services ul li:first-child{
+.visualizations ul li:first-child{
     margin-left: 0;
 }
 
-.services ul li .separator{
+.visualizations ul li .separator{
     display: block;
     width: 1px;
     height: 20px;
@@ -181,7 +161,7 @@ header.light nav ul li a:hover{
     margin: 20px auto;
 }
 
-.services ul li h2{
+.visualizations ul li h2{
     color: #616161;
     font-family: "Verdana";
     font-size: 18px;
@@ -189,7 +169,7 @@ header.light nav ul li a:hover{
     margin: 0;
 }
 
-.services ul li p{
+.visualizations ul li p{
    color: #838181;
     font-family: "Verdana";
     font-size: 14px;
@@ -197,10 +177,6 @@ header.light nav ul li a:hover{
     margin-top: 40px;
     letter-spacing: .5px;
 }
-
-
-
-
 
 
 
@@ -242,32 +218,32 @@ header.light nav ul li a:hover{
 
 
 
-/*    testimonials    */
-.testimonials{
+/*    user-reviews    */
+.user-reviews{
     margin-top: 100px;
 }
 
-.testimonials ul{
+.user-reviews ul{
     margin-top: 70px;
     list-style: none;
 }
 
-.testimonials ul li{
+.user-reviews ul li{
     display: block;
     float: left;
     margin-left: 80px;
     width: 313px;
 }
 
-.testimonials ul li:first-child{
+.user-reviews ul li:first-child{
     margin-left: 0;
 }
 
-.testimonials ul li .quotes{
+.user-reviews ul li .quotes{
     margin-right: 10px;
 }
 
-.testimonials ul li p{
+.user-reviews ul li p{
     color: #838181;
     font-family: "Verdana";
     font-size: 16px;
@@ -279,11 +255,11 @@ header.light nav ul li a:hover{
     position: relative;
 }
 
-.testimonials ul li .client{
+.user-reviews ul li .client{
     margin-left: 20px;
 }
 
-.testimonials ul li .client img.avatar{
+.user-reviews ul li .client img.avatar{
     float: left;
     margin-right: 20px;
     -webkit-border-radius: 100px;
@@ -292,11 +268,11 @@ header.light nav ul li a:hover{
     border-radius: 100px;
 }
 
-.testimonials ul li .client .client_details{
+.user-reviews ul li .client .client_details{
     float: left;
 }
 
-.testimonials ul li .client .client_details h4{
+.user-reviews ul li .client .client_details h4{
     color: #7b7979;
     font-family: "Verdana";
     font-size: 14px;
@@ -304,7 +280,7 @@ header.light nav ul li a:hover{
     margin: 0 0 10px 0;
 }
 
-.testimonials ul li .client .client_details h5{
+.user-reviews ul li .client .client_details h5{
     color: #7b7979;
     font-family: "Verdana";
     font-size: 12px;
