@@ -6,6 +6,7 @@ body{
     font-family: "Verdana";
 }
 
+#mapid { height: 250px; }
 
 #myInput {
     background-image: url('/css/searchicon.png'); /* Add a search icon to input */
