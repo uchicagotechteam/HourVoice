@@ -12,6 +12,7 @@
    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
    crossorigin=""></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 
 </head>
 
@@ -38,40 +39,39 @@
 	<table id="myTable">
 	  <tr class="header">
 	    <th style="width:33%;" onclick="sortTable(0)">Employer</th>
-	    <th style="width:22%;" onclick="sortTable(1)">Address</th>
+	    <th style="width:27%;" onclick="sortTable(1)">Address</th>
 	    <th style="width:15%" onclick="sortTable(2)">City</th>
-	    <th style="width:20%" onclick="sortTable(3)">Hourvoice Members</th>
+	    <th style="width:15%" onclick="sortTable(3)">Hourvoice Members</th>
 	    <th style="width:10%;" onclick="sortTable(4)">Score</th>
 	  </tr>
-	  <tr>
-	    <td>Employer 1</td>
-	    <td>Address 1</td>
-	    <td>Chicago</td>
-	    <td>18</td>
-	    <td>20</td>
-	  </tr>
-	  <tr>
-	    <td>Employer 2</td>
-	    <td>Address 2</td>
-	    <td>Chicago</td>
-	    <td>5</td>
-	    <td>60</td>
-	  </tr>
-	  <tr>
-	    <td>Employer 3</td>
-	    <td>Address 3</td>
-	    <td>Park Ridge</td>
-	    <td>23</td>
-	    <td>55</td>
-	  </tr>
-	  <tr>
-	    <td>Employer 4</td>
-	    <td>Address 4</td>
-	    <td>Oak Brook</td>
-	    <td>6</td>
-	    <td>82</td>
-	  </tr>
 	</table>
+
+	<script>
+		var business_info = []
+
+		$.ajax({
+			url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
+			type: "GET",
+			data: {
+				"$limit": 10,
+				"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
+			}
+		}).done(function(data) {
+			business_info = data;
+			console.log(business_info);
+			var table=document.getElementById("myTable");
+			$.each(business_info, function(i, business){
+				var row = table.insertRow(i+1);
+				row.insertCell(0).innerHTML=business.doing_business_as_name.toLowerCase();
+				row.insertCell(1).innerHTML=business.address.toLowerCase();
+				row.insertCell(2).innerHTML=business.city.toLowerCase();
+				row.insertCell(3).innerHTML=Math.floor(Math.random() * 50);
+				row.insertCell(4).innerHTML=Math.floor(Math.random() * 100);
+			});
+
+		});
+	</script>
+
 
 	<script>
 		function searchFunction() {
