@@ -70,6 +70,14 @@
 			});
 
 		});
+		/*need latitude, longitude data for each business*/
+		var marker = L.marker([41.8781, -87.6298]).addTo(mymap);
+		var circle = L.circle([41.8781, -87.6298], {
+		    color: 'red',
+		    fillColor: '#f03',
+		    fillOpacity: 0.5,
+		    radius: 30
+		}).addTo(mymap);
 	</script>
 
 
