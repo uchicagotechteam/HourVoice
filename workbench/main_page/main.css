@@ -1,6 +1,9 @@
 header{
     height: 50px;
-    background-color: "blue";
+}
+
+body{
+    font-family: "Verdana";
 }
 
 
@@ -19,7 +22,7 @@ header{
     border-collapse: collapse; /* Collapse borders */
     width: 100%; /* Full-width */
     border: 1px solid #ddd; /* Add a grey border */
-    font-size: 18px; /* Increase font-size */
+    font-size: 14px; /* Increase font-size */
     font-color:
 }
 
