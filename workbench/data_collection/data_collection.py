@@ -68,8 +68,8 @@ def roundMapFood(data):
 
 def isFloat(str):
         try:
-                float(str)
-                return True
+        	float(str)
+        	return True
         except ValueError:
                 return False
 
@@ -115,10 +115,16 @@ def countUpViolators():
 	names = []
 	final1 = []
 	final = ""
+	(oshalats, oshalons) = getOSHAChicago()
+	oshadata = []
+	for i in oshalats:
+		if isFloat(osha_data[i[1]][9]):
+			osha_data[i[1]][9] = str(osha_data[i[1]][9])
+			oshadata.append(osha_data[i[1]])
 	for item in cross_refed:
 		names.append(item[0])
 	for i in cross_refed:
-		final1.append([biz_data[i[1]] + [str(names.count(i[0]))] + osha_data[i[2]] + [str(i[3])]])
+		final1.append([biz_data[i[1]] + [str(names.count(i[0]))] + oshadata[i[2]] + [str(i[3])]])
 	for j in final1:
 		final = final + (','.join(j[0])) + '\n'
 	return final
@@ -131,17 +137,18 @@ def getCrossRefedLocations():
 	oshadata = []
 	for i in oshalats:
 		oshalaforcomp.append(float(i[0]))
-		oshadata.append(osha_data[i[1]])
+		if isFloat(osha_data[i[1]][9]):
+			osha_data[i[1]][9] = float(osha_data[i[1]][9])
+			oshadata.append(osha_data[i[1]])
 	for j in oshalons:
 		oshaloforcomp.append(float(j[0]))
 	for i in range(len(biz_lats_for_OSHA)):
 		if (biz_lats_for_OSHA[i] in oshalaforcomp) and (biz_lons_for_OSHA[i] in set(oshaloforcomp)):
 			for j in range(len(oshadata)):
+				print (oshadata[j][9],biz_lats_for_OSHA[i], oshadata[j][9] == biz_lats_for_OSHA[i])
 				if oshadata[j][9] == biz_lats_for_OSHA[i]:
 					oshaindex = j
-				else:
-					oshaindex = 0
-			locs.append((biz_licenses[i], i, oshaindex, 00))
+			locs.append((biz_licenses[i], i, oshaindex, 0))
 	for i in range(len(biz_lats_for_food)):
 		if (biz_lats_for_food[i] in set(food_lats)) and (biz_lons_for_food[i] in set(food_lons)):
 			locs.append((biz_licenses[i], i, 0 ,i))
