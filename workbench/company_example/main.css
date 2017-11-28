@@ -1,42 +1,3 @@
-/*  Fonts  */
-@font-face {
-    font-family: 'raleway-regular';
-    src: url('../fonts/raleway-regular.eot');
-    src: url('../fonts/raleway-regular.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/raleway-regular.woff') format('woff'),
-         url('../fonts/raleway-regular.ttf') format('truetype'),
-         url('../fonts/raleway-regular.svg#raleway-regular') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'raleway-semibold';
-    src: url('../fonts/raleway-semibold.eot');
-    src: url('../fonts/raleway-semibold.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/raleway-semibold.woff') format('woff'),
-         url('../fonts/raleway-semibold.ttf') format('truetype'),
-         url('../fonts/raleway-semibold.svg#raleway-semibold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-@font-face {
-    font-family: 'raleway-bold';
-    src: url('../fonts/raleway-bold.eot');
-    src: url('../fonts/raleway-bold.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/raleway-bold.woff') format('woff'),
-         url('../fonts/raleway-bold.ttf') format('truetype'),
-         url('../fonts/raleway-bold.svg#raleway-bold') format('svg');
-    font-weight: normal;
-    font-style: normal;
-
-}
-
-
-
 /*  General CSS*/
 body{
     background: #fff;
@@ -49,7 +10,7 @@ body{
 
 h1, h2, h3, h4, h5 ,h6{
     color: #626262;
-    font-family: "raleway-regular", arial;
+    font-family: "Helvetica", arial;
     letter-spacing: 1px;
 }
 
@@ -81,10 +42,10 @@ header{
     height: 125px;
     background-color: "blue";
 }
-header .company p{
+header .company h2{
     float: left;
     color: #838181;
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 40px;
     margin-top: 50px;
 }
@@ -104,7 +65,7 @@ header nav ul li{
 
 header nav ul li a{
     text-decoration: none;  
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 14px;
 
     transition:all .2s linear;
@@ -151,7 +112,7 @@ header.dark nav ul li a:hover{
 
 .services ul li h2{
     color: #616161;
-    font-family: "raleway-bold";
+    font-family: "Helvetica";
     font-size: 18px;
     font-weight: bold;
     margin: 0;
@@ -159,53 +120,12 @@ header.dark nav ul li a:hover{
 
 .services ul li p{
    color: #838181;
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 14px;
     line-height: 28px; 
     margin-top: 40px;
     letter-spacing: .5px;
 }
-
-
-
-
-
-
-
-/*    Video    */
-.video{
-    display: block;
-    width: 100%;
-    height: 350px;
-    text-align: center;
-    margin-top: 100px;
-    background: url('../img/video.jpg') no-repeat;    
-    background-size: cover;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-}
-
-.video .video_logo{
-    margin-top: 85px;
-}
-
-.video h3{
-    color: #fff;
-    font-family: "raleway-regular";
-    font-size: 14px;
-    font-weight: normal!important;
-    margin: 20px 0 0 0;
-}
-
-.video #play_btn{
-    display: inline-block;
-    width: 71px;
-    height: 71px;
-    background: url('../img/play_btn.png') no-repeat;
-    margin-top: 40px;
-}
-
 
 
 
@@ -216,7 +136,7 @@ header.dark nav ul li a:hover{
 
 .title h2{
     color: #616161;
-    font-family: "raleway-bold";
+    font-family: "Helvetica";
     font-size: 30px;
     font-weight: bold;
     margin: 0 0 20px 0;
@@ -225,7 +145,7 @@ header.dark nav ul li a:hover{
 
 .title h3{
     color: #9b9b9b;
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 14px;
     margin: 0 0 20px 0;
     font-weight: normal!important;
@@ -274,7 +194,7 @@ header.dark nav ul li a:hover{
 
 .testimonials ul li p{
     color: #838181;
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 16px;
     line-height: 28px;
     letter-spacing: .5px;
@@ -284,15 +204,6 @@ header.dark nav ul li a:hover{
     position: relative;
 }
 
-.testimonials ul li p .triangle{
-    display: block;
-    width: 10px;
-    height: 5px;
-    background: url('../img/testimonial_triangle.png') no-repeat;
-    position: absolute;
-    bottom: -5px;
-    left: 40px;
-}
 
 .testimonials ul li .client{
     margin-left: 20px;
@@ -313,7 +224,7 @@ header.dark nav ul li a:hover{
 
 .testimonials ul li .client .client_details h4{
     color: #7b7979;
-    font-family: "raleway-semibold";
+    font-family: "Helvetica";
     font-size: 14px;
     font-weight: bold;
     margin: 0 0 10px 0;
@@ -321,7 +232,7 @@ header.dark nav ul li a:hover{
 
 .testimonials ul li .client .client_details h5{
     color: #7b7979;
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 12px;
     margin: 0;
     font-weight: normal;
@@ -418,14 +329,14 @@ footer .footer_logo{
 footer .rights p{
     float: left;
     color: #838181;
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 13px;
     margin: 5px 0 0 40px; 
 }
 
 footer .rights p a{
     color: #777;
-    font-family: "raleway-semibold";
+    font-family: "Helvetica";
     font-size: 13px;
     font-weight: bold;
     text-decoration: none;
@@ -445,7 +356,7 @@ footer nav ul li{
 
 footer nav ul li a{
     color: #838181;
-    font-family: "raleway-regular";
+    font-family: "Helvetica";
     font-size: 13px;
     text-decoration: none;
 
