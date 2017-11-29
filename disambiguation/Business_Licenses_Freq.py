@@ -5,10 +5,8 @@ from collections import Counter
 from collections import defaultdict
 import sys
 
-c=Counter()
-
 columns = defaultdict(list)
-csv_file = r'''C:\Users\walsh\Documents\Hour Voice\Business_Licenses.txt'''
+csv_file = 'Business_Licenses.csv'
 
 #expanding max size for csv rows
 maxInt = sys.maxsize
@@ -25,33 +23,14 @@ while decrement:
 #make dictionary of columns
 with open(csv_file, 'r') as f:
     reader = csv.reader(f)
-    #reader.next()
     for row in reader:
-        for (k,v) in enumerate(row):  
+        for (k,v) in enumerate(row):
             columns[k].append(v)
     f.close()
 
-#look at one column, turn it into a string to regex over
-col=columns[4]
+names = (' '.join(columns[4][1:] + columns[5][1:])).lower().split()
+c = Counter(names)
 
-with open(r'''C:\Users\walsh\Documents\Hour Voice\bl_freq.txt''', 'w') as t:
-    for c in columns:
-        t.write(str(c))
-    t.close()
-
-##col_string=" ".join(col)
-##
-##lower_col=col_string.lower()
-##
-##match_pattern = re.findall(r'\b[a-z]{2,15}\b', lower_col)
-##
-##for word in match_pattern:
-##    c[word]+=1
-##
-###write most common regex finds to file
-##with open(r'''C:\Users\walsh\Documents\Hour Voice\bl_freq.txt''', 'w') as h:
-##    for k,v in  c.most_common():
-##        h.write( "{} {}\n".format(k,v) )
-##    h.close()
-##
-##print("file done")    
+with open('name_freqs.txt', 'w') as f:
+    for (word, freq) in c.most_common(300):
+        f.write(word + ' ' + str(freq) + '\n')
