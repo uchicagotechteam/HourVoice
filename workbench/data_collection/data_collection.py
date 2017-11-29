@@ -99,12 +99,12 @@ food_lats    = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'lati
 food_lons    = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'longitude')))
 osha_lats    = getCSVDataByHeader(osha_data, osha_header, 'Latitude')[1:]
 osha_lons    = getCSVDataByHeader(osha_data, osha_header, 'Longitude')[1:]
-osha_cities  = getCSVDataByHeader(osha_data, osha_header, 'City')
 
 def getOSHAChicago():
 	indices = []
 	chilons = []
 	chilats = []
+	osha_cities  = getCSVDataByHeader(osha_data, osha_header, 'City')
 	for i in range(len(osha_cities)):
 		if (osha_cities[i] == 'CHICAGO'):
 			indices.append(i)
@@ -133,7 +133,8 @@ def countUpViolators():
 	for item in cross_refed:
 		names.append(item[0])
 	for i in cross_refed:
-		final1.append([ i[2] + [str(names.count(i[0]))] + i[1] +[str(i[3])]])
+		bulk = [[str(names.count(i[0]))] + i[2] + i[1] + i[3]]
+		final1.append(bulk)
 	for j in final1:
 		final = final + (','.join(j[0])) + '\n'
 	return final
@@ -162,13 +163,49 @@ def getCrossRefedLocations():
 					i[lons] = str(i[lons])
 					j[9] = str(j[9])
 					j[10] = str(j[10])
-					print (i[names], j[9], blats, i, j)
-					locs.append((i[names], i, j, 0))
-	for i in range(len(biz_lats_for_food)):
-		if (biz_lats_for_food[i] in set(food_lats)) and (biz_lons_for_food[i] in set(food_lons)):
-			biz_data[i][lats] = str(biz_data[i][lats])
-			biz_data[i][lons] = str(biz_data[i][lons])
-			locs.append((biz_licenses[i],biz_data[i],[],i))
+					locs.append((i[names], i, j, []))
+	for j in biz_data:
+		blats = round(float(j[lats]),6)
+		blons = round(float(j[lons]),6)
+		if (blats in set(food_lats)) and (blons in set(food_lons)):
+			for k in load_food:
+				if 'latitude' and 'longitude' in k:
+					if round(float(k['latitude']),6) == blats and round(float(k['longitude']),6) == blons:
+						j[lats] = str(j[lats])
+						j[lons] = str(j[lons])
+						k['latitude'] = str(k['latitude'])
+						k['longitude'] = str(k['longitude'])
+						bulk = [x[1] for x in k.items() if not (type(x[1]) is dict)]
+						print bulk
+						locs.append((j[names],j,[],bulk))
 	return (locs, oshadata)
-		
+
+def findAllAtLatsAndLons():
+	biz_at_lat = []
+	(oshalats, oshalons) = getOSHAChicago()
+	oshalaforcomp = []
+	oshaloforcomp = []
+	oshadata = []
+	for i in oshalats:
+		oshalaforcomp.append(float(i[0]))
+		if isFloat(osha_data[i[1]][9]) and isFloat(osha_data[i[1]][10]):
+			osha_data[i[1]][9]  = float(osha_data[i[1]][9])
+			osha_data[i[1]][10] = float(osha_data[i[1]][10])
+		oshadata.append(osha_data[i[1]])
+	for j in oshalons:
+		oshaloforcomp.append(float(j[0]))
+	for i in biz_data:
+		blats = round(float(i[lats]),2)
+		blons = round(float(i[lons]),2)
+		if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
+			for j in oshadata:
+				if j[9] == blats and j[10] == blons and (i[lats] not in biz_at_lat):
+					i[lats] = str(i[lats])
+					i[lons] = str(i[lons])
+					j[9] = str(j[9])
+					j[10] = str(j[10])
+					biz_at_lat.append(i[lats])
+					print (i[names], j[9], blats, i, j)
+	print biz_at_lat
+
 outputdata.write(countUpViolators())
