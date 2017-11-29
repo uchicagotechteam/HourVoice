@@ -25,6 +25,8 @@ osha_header = osha_data[0]
 
 outputdata = open("output.txt", 'w')
 
+outputdata.write("Frequency, " + bizlicense[0][0] + ','.join(osha_header) + ','.join([x[0] for x in load_food[0].items() if not (type(x[0]) is dict)]) + "\n")
+
 # separates the key info by commas
 def splitCSV(data):
 	csv_list = []
@@ -37,25 +39,16 @@ biz_data = splitCSV(bizlicense[:500])
 
 # returns the index of the desired header
 def getHeaderIndex(headers, header):
-	print "getting headers"
 	for i in range(len(headers)):
 		if headers[i] == header:
 			return i
 
 def getCSVDataByHeader(data, headers, header):
-	col = []
-	print "getting data from csv"
 	head = getHeaderIndex(headers, header)
-	for d in data:
-		col.append(d[head])
-	return col
+	return [d[head] for d in data]
 
 def getJSONDataByHeader(data, header):
-	jdat = []
-	for d in data:
-		if header in set(d):
-			jdat.append(d[header])
-	return jdat
+	return [d[header] for d in data if (header in d)]
 
 def toLower(data):
 	return data.lower()
@@ -74,9 +67,9 @@ def isFloat(str):
             return False
 
 dol_emps     = getJSONDataByHeader(loadedData, "legal_name")
-osha_emps    = map(toLower,  getCSVDataByHeader(osha_data, osha_header, 'Employer'))
-biz_licenses = map(toLower , getCSVDataByHeader(biz_data, biz_header, "DOING BUSINESS AS NAME"))
-food_emps    = map(toLower , getJSONDataByHeader(load_food, 'dba_name'))
+osha_emps    = map(toLower, getCSVDataByHeader(osha_data, osha_header, 'Employer'))
+biz_licenses = map(toLower, getCSVDataByHeader(biz_data, biz_header, "DOING BUSINESS AS NAME"))
+food_emps    = map(toLower, getJSONDataByHeader(load_food, 'dba_name'))
 
 lats = getHeaderIndex(biz_header, "LATITUDE")
 lons = getHeaderIndex(biz_header, "LONGITUDE")
@@ -95,10 +88,10 @@ biz_lats_for_OSHA = map(roundMapOSHA, map(float, getCSVDataByHeader(biz_data, bi
 biz_lons_for_OSHA = map(roundMapOSHA, map(float, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:]))
 biz_lats_for_food = map(roundMapFood, map(float, getCSVDataByHeader(biz_data, biz_header, "LATITUDE")[1:]))
 biz_lons_for_food = map(roundMapFood, map(float, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:]))
-food_lats    = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'latitude')))
-food_lons    = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'longitude')))
-osha_lats    = getCSVDataByHeader(osha_data, osha_header, 'Latitude')[1:]
-osha_lons    = getCSVDataByHeader(osha_data, osha_header, 'Longitude')[1:]
+food_lats         = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'latitude')))
+food_lons         = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'longitude')))
+osha_lats         = getCSVDataByHeader(osha_data, osha_header, 'Latitude')[1:]
+osha_lons         = getCSVDataByHeader(osha_data, osha_header, 'Longitude')[1:]
 
 def getOSHAChicago():
 	indices = []
@@ -153,17 +146,8 @@ def getCrossRefedLocations():
 		oshadata.append(osha_data[i[1]])
 	for j in oshalons:
 		oshaloforcomp.append(float(j[0]))
-	for i in biz_data:
-		blats = round(float(i[lats]),2)
-		blons = round(float(i[lons]),2)
-		if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
-			for j in oshadata:
-				if j[9] == blats and j[10] == blons:
-					i[lats] = str(i[lats])
-					i[lons] = str(i[lons])
-					j[9] = str(j[9])
-					j[10] = str(j[10])
-					locs.append((i[names], i, j, []))
+	biz_at_lat = findAllAtLatsAndLons()
+	locs + [b[1] for b in biz_at_lat]
 	for j in biz_data:
 		blats = round(float(j[lats]),6)
 		blons = round(float(j[lons]),6)
@@ -176,7 +160,6 @@ def getCrossRefedLocations():
 						k['latitude'] = str(k['latitude'])
 						k['longitude'] = str(k['longitude'])
 						bulk = [x[1] for x in k.items() if not (type(x[1]) is dict)]
-						print bulk
 						locs.append((j[names],j,[],bulk))
 	return (locs, oshadata)
 
@@ -204,8 +187,9 @@ def findAllAtLatsAndLons():
 					i[lons] = str(i[lons])
 					j[9] = str(j[9])
 					j[10] = str(j[10])
-					biz_at_lat.append(i[lats])
-					print (i[names], j[9], blats, i, j)
-	print biz_at_lat
+					biz_at_lat.append((i[lats], (i[names], i, j, [])))
+					print i[names], j[9], blats, i, j
+	return biz_at_lat
 
+print findAllAtLatsAndLons()
 outputdata.write(countUpViolators())
