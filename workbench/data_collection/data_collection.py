@@ -25,7 +25,7 @@ osha_header = osha_data[0]
 
 outputdata = open("output.txt", 'w')
 
-outputdata.write("Frequency, " + bizlicense[0][0] + ','.join(osha_header) + ','.join([x[0] for x in load_food[0].items() if not (type(x[0]) is dict)]) + "\n")
+outputdata.write("Frequency," + bizlicense[0][0] + ','.join(osha_header) + ','.join([x[0] for x in load_food[0].items() if not (type(x[0]) is dict)]) + "\n")
 
 # separates the key info by commas
 def splitCSV(data):
@@ -126,7 +126,7 @@ def countUpViolators():
 	for item in cross_refed:
 		names.append(item[0])
 	for i in cross_refed:
-		bulk = [[str(names.count(i[0]))] + i[2] + i[1] + i[3]]
+		bulk = [[str(names.count(i[0]))] + i[1] + i[2] + i[3]]
 		final1.append(bulk)
 	for j in final1:
 		final = final + (','.join(j[0])) + '\n'
@@ -134,20 +134,8 @@ def countUpViolators():
 
 def getCrossRefedLocations():
 	locs = []
-	(oshalats, oshalons) = getOSHAChicago()
-	oshalaforcomp = []
-	oshaloforcomp = []
-	oshadata = []
-	for i in oshalats:
-		oshalaforcomp.append(float(i[0]))
-		if isFloat(osha_data[i[1]][9]) and isFloat(osha_data[i[1]][10]):
-			osha_data[i[1]][9]  = float(osha_data[i[1]][9])
-			osha_data[i[1]][10] = float(osha_data[i[1]][10])
-		oshadata.append(osha_data[i[1]])
-	for j in oshalons:
-		oshaloforcomp.append(float(j[0]))
-	biz_at_lat = findAllAtLatsAndLons()
-	locs + [b[1] for b in biz_at_lat]
+	(biz_at_lat, oshadata) = findAllAtLatsAndLons()
+	locs = locs + [b[1] for b in biz_at_lat]
 	for j in biz_data:
 		blats = round(float(j[lats]),6)
 		blons = round(float(j[lons]),6)
@@ -182,14 +170,14 @@ def findAllAtLatsAndLons():
 		blons = round(float(i[lons]),2)
 		if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
 			for j in oshadata:
-				if j[9] == blats and j[10] == blons and (i[lats] not in biz_at_lat):
+				if j[9] == blats and j[10] == blons and (i[lats] not in [b[0] for b in biz_at_lat]):
 					i[lats] = str(i[lats])
 					i[lons] = str(i[lons])
 					j[9] = str(j[9])
 					j[10] = str(j[10])
 					biz_at_lat.append((i[lats], (i[names], i, j, [])))
-					print i[names], j[9], blats, i, j
-	return biz_at_lat
+					#print i[names], j[9], blats, i, j
+	return (biz_at_lat, oshadata)
 
 print findAllAtLatsAndLons()
 outputdata.write(countUpViolators())
