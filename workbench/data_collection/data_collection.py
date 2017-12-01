@@ -145,7 +145,16 @@ def countUpViolators():
 def getCrossRefedLocations():
 	locs = []
 	(biz_at_lat, oshadata) = findAllAtLatsAndLons()
-	locs = locs + [b[1] for b in biz_at_lat]
+	for business in biz_data:
+		for osha_case in oshadata:
+			align_score = align_strings(business[names], osha_case[osha_names])[0]
+			same_name = align_score > score_thresh
+			if same_name:
+				business[lats] = str(business[lats])
+				business[lons] = str(business[lons])
+				osha_case[9] = str(osha_case[9])
+				osha_case[10] = str(osha_case[10])
+				locs.append((business[names], business, osha_case, []))
 	for j in biz_data:
 		blats = round(float(j[lats]),6)
 		blons = round(float(j[lons]),6)
@@ -176,16 +185,13 @@ def findAllAtLatsAndLons():
     for j in oshalons:
         oshaloforcomp.append(float(j[0]))
     for i in biz_data:
-    	if i[names]
         blats = round(float(i[lats]),2)
         blons = round(float(i[lons]),2)
         if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
-            print('line 176')
             for j in oshadata:
                 same_coords = (j[9] == blats and j[10] == blons)
-            	print align_strings(i[names], j[osha_names])
-            	print "inbetween"
-            	print align_strings(i[names], j[osha_names], to_lower=True)[0]
+                if "university" in i[names].lower() and "university" in j[osha_names].lower():
+	            	print align_strings(i[names], j[osha_names])
                 align_score = align_strings(i[names], j[osha_names])[0]
                 same_name = align_score > score_thresh
                 if same_coords and same_name:
@@ -198,6 +204,5 @@ def findAllAtLatsAndLons():
                     #print i[names], j[9], blats, i, j
     return (biz_at_lat, oshadata)
 
-
-print findAllAtLatsAndLons()
+findAllAtLatsAndLons()
 outputdata.write(countUpViolators())
