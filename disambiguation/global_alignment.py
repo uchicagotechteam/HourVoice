@@ -47,7 +47,7 @@ def build_globally_aligned_strings(str1, str2, directions, gap_char='-'):
 
 def global_alignment_score(alignment_matrix, match=5):
     n, m = len(alignment_matrix), len(alignment_matrix[0])
-    print(alignment_matrix[n-1][m-1])
+    # print(alignment_matrix[n-1][m-1])
     return float(alignment_matrix[n-1][m-1]) / (match * max(n-1, m-1))
 
 
