@@ -51,7 +51,7 @@ def global_alignment_score(alignment_matrix, match=5):
     return float(alignment_matrix[n-1][m-1]) / (match * max(n-1, m-1))
 
 
-def align_strings_globally(str1, str2, score_function, gap=-1, gap_char='-', to_lower=True):
+def align_strings_globally(str1, str2, score_function, gap=-1, gap_char='-', to_lower=False):
     aligned1 = str1.lower() if to_lower else str1
     aligned2 = str2.lower() if to_lower else str2
     directions, alignment_matrix = needleman_wunsch(aligned1, aligned2, score_function, gap=gap)
