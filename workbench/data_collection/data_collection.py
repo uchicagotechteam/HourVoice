@@ -1,5 +1,7 @@
 import json, urllib, csv
 
+score_thresh = 0.9 # for name comparisons/alignments
+
 #gets data from the DoL cases via stanford's stopwagetheft
 url = "http://stopwagetheft.stanford.edu/api/v1/cases"
 response = urllib.urlopen(url)
@@ -74,6 +76,8 @@ food_emps    = map(toLower, getJSONDataByHeader(load_food, 'dba_name'))
 lats = getHeaderIndex(biz_header, "LATITUDE")
 lons = getHeaderIndex(biz_header, "LONGITUDE")
 names = getHeaderIndex(biz_header, "DOING BUSINESS AS NAME")
+osha_names = getHeaderIndex(osha_header, "Employer")
+
 for i in biz_data:
 	if isFloat(i[lats]):
 		i[lats] = float(i[lats])
@@ -170,7 +174,11 @@ def findAllAtLatsAndLons():
 		blons = round(float(i[lons]),2)
 		if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
 			for j in oshadata:
-				if j[9] == blats and j[10] == blons and (i[lats] not in [b[0] for b in biz_at_lat]):
+				# if j[9] == blats and j[10] == blons and (i[lats] not in [b[0] for b in biz_at_lat]):
+                same_coords = j[9] == blats and j[10] == blons
+                align_score = align_strings(i[names], j[osha_names])[0]
+                same_name = align_score > score_thresh
+				if same_coords and same_name:
 					i[lats] = str(i[lats])
 					i[lons] = str(i[lons])
 					j[9] = str(j[9])
