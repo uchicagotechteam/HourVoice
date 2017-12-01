@@ -1,6 +1,12 @@
 import json, urllib, csv
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../disambiguation'))
 
-score_thresh = 0.9 # for name comparisons/alignments
+from align_strings import align_strings
+
+
+score_thresh = 0.7 # for name comparisons/alignments
 
 #gets data from the DoL cases via stanford's stopwagetheft
 url = "http://stopwagetheft.stanford.edu/api/v1/cases"
@@ -27,7 +33,7 @@ osha_header = osha_data[0]
 
 outputdata = open("output.txt", 'w')
 
-outputdata.write("Frequency," + bizlicense[0][0] + ','.join(osha_header) + ','.join([x[0] for x in load_food[0].items() if not (type(x[0]) is dict)]) + "\n")
+outputdata.write("Frequency," + bizlicense[0][0] + ", " + ','.join(osha_header) + ", "+','.join([x[0] for x in load_food[0].items() if not (type(x[0]) is dict)]) + "\n")
 
 # separates the key info by commas
 def splitCSV(data):
@@ -170,12 +176,16 @@ def findAllAtLatsAndLons():
     for j in oshalons:
         oshaloforcomp.append(float(j[0]))
     for i in biz_data:
+    	if i[names]
         blats = round(float(i[lats]),2)
         blons = round(float(i[lons]),2)
         if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
             print('line 176')
             for j in oshadata:
                 same_coords = (j[9] == blats and j[10] == blons)
+            	print align_strings(i[names], j[osha_names])
+            	print "inbetween"
+            	print align_strings(i[names], j[osha_names], to_lower=True)[0]
                 align_score = align_strings(i[names], j[osha_names])[0]
                 same_name = align_score > score_thresh
                 if same_coords and same_name:
@@ -184,8 +194,10 @@ def findAllAtLatsAndLons():
                     j[9] = str(j[9])
                     j[10] = str(j[10])
                     biz_at_lat.append((i[lats], (i[names], i, j, [])))
+
                     #print i[names], j[9], blats, i, j
     return (biz_at_lat, oshadata)
+
 
 print findAllAtLatsAndLons()
 outputdata.write(countUpViolators())

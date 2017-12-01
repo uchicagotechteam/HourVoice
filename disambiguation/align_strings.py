@@ -1,11 +1,12 @@
 import numpy as np
 import string
+import os
 from global_alignment import align_strings_globally
 # from functools import lru_cache
 
 def get_stop_words():
     stop_words = []
-    with open('company_name_stop_words.txt', 'r') as f:
+    with open(os.path.abspath('../../disambiguation/company_name_stop_words.txt'), 'r') as f:
         stop_words = f.read().split()
     return stop_words
 
@@ -49,5 +50,5 @@ def align_strings(str1, str2, gap=-1, gap_char=' ', min_length=2, remove_punctua
     str1_mod = preprocess(str1, min_length=min_length, remove_punctuation=remove_punctuation)
     str2_mod = preprocess(str2, min_length=min_length, remove_punctuation=remove_punctuation)
     if not str1_mod or not str2_mod: # only stop words in string
-        return 0
+        return (0,'','')
     return align_strings_globally(str1_mod, str2_mod, gap=gap, gap_char=gap_char, score_function=get_matching_score, to_lower=to_lower)
