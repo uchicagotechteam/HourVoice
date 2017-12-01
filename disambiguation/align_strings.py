@@ -45,7 +45,7 @@ def fraction_of_identities(aligned_str1, aligned_str2):
     return float(num_identities) / max_len
 
 
-def align_strings(str1, str2, gap=-1, gap_char='-', min_length=2, remove_punctuation=False, to_lower=False):
+def align_strings(str1, str2, gap=-1, gap_char=' ', min_length=2, remove_punctuation=True, to_lower=False):
     str1_mod = preprocess(str1, min_length=min_length, remove_punctuation=remove_punctuation)
     str2_mod = preprocess(str2, min_length=min_length, remove_punctuation=remove_punctuation)
     if not str1_mod or not str2_mod: # only stop words in string
