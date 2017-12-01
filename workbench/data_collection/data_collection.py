@@ -156,36 +156,36 @@ def getCrossRefedLocations():
 	return (locs, oshadata)
 
 def findAllAtLatsAndLons():
-	biz_at_lat = []
-	(oshalats, oshalons) = getOSHAChicago()
-	oshalaforcomp = []
-	oshaloforcomp = []
-	oshadata = []
-	for i in oshalats:
-		oshalaforcomp.append(float(i[0]))
-		if isFloat(osha_data[i[1]][9]) and isFloat(osha_data[i[1]][10]):
-			osha_data[i[1]][9]  = float(osha_data[i[1]][9])
-			osha_data[i[1]][10] = float(osha_data[i[1]][10])
-		oshadata.append(osha_data[i[1]])
-	for j in oshalons:
-		oshaloforcomp.append(float(j[0]))
-	for i in biz_data:
-		blats = round(float(i[lats]),2)
-		blons = round(float(i[lons]),2)
-		if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
-			for j in oshadata:
-				# if j[9] == blats and j[10] == blons and (i[lats] not in [b[0] for b in biz_at_lat]):
-                same_coords = j[9] == blats and j[10] == blons
+    biz_at_lat = []
+    (oshalats, oshalons) = getOSHAChicago()
+    oshalaforcomp = []
+    oshaloforcomp = []
+    oshadata = []
+    for i in oshalats:
+        oshalaforcomp.append(float(i[0]))
+        if isFloat(osha_data[i[1]][9]) and isFloat(osha_data[i[1]][10]):
+            osha_data[i[1]][9]  = float(osha_data[i[1]][9])
+            osha_data[i[1]][10] = float(osha_data[i[1]][10])
+        oshadata.append(osha_data[i[1]])
+    for j in oshalons:
+        oshaloforcomp.append(float(j[0]))
+    for i in biz_data:
+        blats = round(float(i[lats]),2)
+        blons = round(float(i[lons]),2)
+        if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
+            print('line 176')
+            for j in oshadata:
+                same_coords = (j[9] == blats and j[10] == blons)
                 align_score = align_strings(i[names], j[osha_names])[0]
                 same_name = align_score > score_thresh
-				if same_coords and same_name:
-					i[lats] = str(i[lats])
-					i[lons] = str(i[lons])
-					j[9] = str(j[9])
-					j[10] = str(j[10])
-					biz_at_lat.append((i[lats], (i[names], i, j, [])))
-					#print i[names], j[9], blats, i, j
-	return (biz_at_lat, oshadata)
+                if same_coords and same_name:
+                    i[lats] = str(i[lats])
+                    i[lons] = str(i[lons])
+                    j[9] = str(j[9])
+                    j[10] = str(j[10])
+                    biz_at_lat.append((i[lats], (i[names], i, j, [])))
+                    #print i[names], j[9], blats, i, j
+    return (biz_at_lat, oshadata)
 
 print findAllAtLatsAndLons()
 outputdata.write(countUpViolators())
