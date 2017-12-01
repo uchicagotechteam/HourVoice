@@ -5,45 +5,29 @@ sys.path.insert(0, os.path.abspath('../../disambiguation'))
 
 from align_strings import align_strings
 
-
 score_thresh = 0.7 # for name comparisons/alignments
 
-#gets data from the DoL cases via stanford's stopwagetheft
-url = "http://stopwagetheft.stanford.edu/api/v1/cases"
-response = urllib.urlopen(url)
-j = json.loads(response.read())
-loadedData = j['data']
+food_inspection_file = open("cityofchicagofood.json", 'r')
+food_inspection_data = json.loads(food_inspection_file.read())
 
-food_data = open("cityofchicagofood.json", 'r')
-load_food = json.loads(food_data.read())
+all_chicago_businesses = [row for row in csv.reader(open("Business_Licenses.csv", 'r'), delimiter='"')]
+chicago_business_headers = all_chicago_businesses[0][0].split(',')
 
-bizlicense = []
-with open("Business_Licenses.csv", 'r') as csvfile:
-	reader = csv.reader(csvfile, delimiter='"')
-	for row in reader:
-		bizlicense.append(row)
-biz_header = bizlicense[0][0].split(',')
+osha_data = [row for row in csv.reader(open("severeinjury.csv", 'r'))]
+osha_headers = osha_data[0]
 
-osha_data = []
-with open("severeinjury.csv", 'r') as csvfile:
-	reader = csv.reader(csvfile)
-	for row in reader:
-		osha_data.append(row)
-osha_header = osha_data[0]
+output_file = open("output.txt", 'w')
 
-outputdata = open("output.txt", 'w')
-
-outputdata.write("Frequency," + bizlicense[0][0] + ", " + ','.join(osha_header) + ", "+','.join([x[0] for x in load_food[0].items() if not (type(x[0]) is dict)]) + "\n")
+#giving the output file headers
+output_file.write("Frequency,"
+                 + all_chicago_businesses[0][0]
+				 + ", "
+				 + ','.join(osha_headers)
+				 + ", "
+				 +','.join([x[0] for x in food_inspection_data[0].items() if not (type(x[0]) is dict)]) + "\n")
 
 # separates the key info by commas
-def splitCSV(data):
-	csv_list = []
-	for d in data:
-		if (len(d[0].split(',')) == len(biz_header)):
-			csv_list.append(d[0].split(','))
-	return csv_list
-
-biz_data = splitCSV(bizlicense[:500])
+biz_data = [d[0].split(',') for d in all_chicago_businesses[:500] if len(d[0].split(',')) == len(chicago_business_headers)]
 
 # returns the index of the desired header
 def getHeaderIndex(headers, header):
@@ -74,101 +58,63 @@ def isFloat(str):
         except ValueError:
             return False
 
-dol_emps     = getJSONDataByHeader(loadedData, "legal_name")
-osha_emps    = map(toLower, getCSVDataByHeader(osha_data, osha_header, 'Employer'))
-biz_licenses = map(toLower, getCSVDataByHeader(biz_data, biz_header, "DOING BUSINESS AS NAME"))
-food_emps    = map(toLower, getJSONDataByHeader(load_food, 'dba_name'))
+#import indices
+latitude_chibiz  = getHeaderIndex(chicago_business_headers, "LATITUDE")
+longitude_chibiz = getHeaderIndex(chicago_business_headers, "LONGITUDE")
+dba_name_chibiz  = getHeaderIndex(chicago_business_headers, "DOING BUSINESS AS NAME")
+dba_name_osha    = getHeaderIndex(osha_headers, "Employer")
 
-lats = getHeaderIndex(biz_header, "LATITUDE")
-lons = getHeaderIndex(biz_header, "LONGITUDE")
-names = getHeaderIndex(biz_header, "DOING BUSINESS AS NAME")
-osha_names = getHeaderIndex(osha_header, "Employer")
+#latitudes and longitudes for osha and food inspection database
+food_lats = map(roundMapFood, map(float, getJSONDataByHeader(food_inspection_data, 'latitude')))
+food_lons = map(roundMapFood, map(float, getJSONDataByHeader(food_inspection_data, 'longitude')))
+osha_lats = getCSVDataByHeader(osha_data, osha_headers, 'Latitude')[1:]
+osha_lons = getCSVDataByHeader(osha_data, osha_headers, 'Longitude')[1:]
 
-for i in biz_data:
-	if isFloat(i[lats]):
-		i[lats] = float(i[lats])
+#fixes formatting error for missing data
+for business in biz_data:
+	if isFloat(business[latitude_chibiz]):
+		business[latitude_chibiz] = float(business[latitude_chibiz])
 	else:
-		i[lats] = 0.0
-	if isFloat(i[lons]):
-		i[lons] = float(i[lons])
+		business[latitude_chibiz] = 0.0
+	if isFloat(business[longitude_chibiz]):
+		business[longitude_chibiz] = float(business[longitude_chibiz])
 	else:
-		i[lons] = 0.0
-
-biz_lats_for_OSHA = map(roundMapOSHA, map(float, getCSVDataByHeader(biz_data, biz_header, "LATITUDE")[1:]))
-biz_lons_for_OSHA = map(roundMapOSHA, map(float, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:]))
-biz_lats_for_food = map(roundMapFood, map(float, getCSVDataByHeader(biz_data, biz_header, "LATITUDE")[1:]))
-biz_lons_for_food = map(roundMapFood, map(float, getCSVDataByHeader(biz_data, biz_header, "LONGITUDE")[1:]))
-food_lats         = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'latitude')))
-food_lons         = map(roundMapFood, map(float, getJSONDataByHeader(load_food, 'longitude')))
-osha_lats         = getCSVDataByHeader(osha_data, osha_header, 'Latitude')[1:]
-osha_lons         = getCSVDataByHeader(osha_data, osha_header, 'Longitude')[1:]
+		business[longitude_chibiz] = 0.0
 
 def getOSHAChicago():
-	indices = []
-	chilons = []
-	chilats = []
-	osha_cities  = getCSVDataByHeader(osha_data, osha_header, 'City')
-	for i in range(len(osha_cities)):
-		if (osha_cities[i] == 'CHICAGO'):
-			indices.append(i)
-	for j in indices:
-		chilons.append((osha_lons[j],j))
-		chilats.append((osha_lats[j],j))
-	return (chilats, chilons)
+	osha_cities  = getCSVDataByHeader(osha_data, osha_headers, 'City')
+	indices = [i for i in range(len(osha_cities)) if (osha_cities[i] == 'CHICAGO')]
+	osha_chicago_lons = [(osha_lons[j],j) for j in indices]
+	osha_chicago_lats = [(osha_lats[j],j) for j in indices]
+	return (osha_chicago_lats, osha_chicago_lons)
 
-# we'd run disambiguation down here
-def getCrossRefedEmployers():
-	emps = []
-	for f in food_emps:
-		if (f in set(osha_emps)):
-			emps.append(f)
-	return emps
-
-def countUpViolators():
-	(cross_refed, oshadata) = getCrossRefedLocations()
-	names = []
-	final1 = []
-	final = ""
-	for i in oshadata:
-		if isFloat(i[9]) and isFloat(i[10]):
-			i[9] = str(i[9])
-			i[10] = str(i[10])
-	for item in cross_refed:
-		names.append(item[0])
-	for i in cross_refed:
-		bulk = [[str(names.count(i[0]))] + i[1] + i[2] + i[3]]
-		final1.append(bulk)
-	for j in final1:
-		final = final + (','.join(j[0])) + '\n'
-	return final
-
-def getCrossRefedLocations():
-	locs = []
+def crossReferenceDatabases():
+	compared_data = []
 	(biz_at_lat, oshadata) = findAllAtLatsAndLons()
 	for business in biz_data:
 		for osha_case in oshadata:
-			align_score = align_strings(business[names], osha_case[osha_names])[0]
+			align_score = align_strings(business[dba_name_chibiz], osha_case[dba_name_osha])[0]
 			same_name = align_score > score_thresh
 			if same_name:
-				business[lats] = str(business[lats])
-				business[lons] = str(business[lons])
+				business[latitude_chibiz] = str(business[latitude_chibiz])
+				business[longitude_chibiz] = str(business[longitude_chibiz])
 				osha_case[9] = str(osha_case[9])
 				osha_case[10] = str(osha_case[10])
-				locs.append((business[names], business, osha_case, []))
-	for j in biz_data:
-		blats = round(float(j[lats]),6)
-		blons = round(float(j[lons]),6)
+				compared_data.append((business[dba_name_chibiz], business, osha_case, []))
+	for business in biz_data:
+		blats = round(float(business[latitude_chibiz]),6)
+		blons = round(float(business[longitude_chibiz]),6)
 		if (blats in set(food_lats)) and (blons in set(food_lons)):
-			for k in load_food:
-				if 'latitude' and 'longitude' in k:
-					if round(float(k['latitude']),6) == blats and round(float(k['longitude']),6) == blons:
-						j[lats] = str(j[lats])
-						j[lons] = str(j[lons])
-						k['latitude'] = str(k['latitude'])
-						k['longitude'] = str(k['longitude'])
-						bulk = [x[1] for x in k.items() if not (type(x[1]) is dict)]
-						locs.append((j[names],j,[],bulk))
-	return (locs, oshadata)
+			for food_inspection_case in food_inspection_data:
+				if 'latitude' and 'longitude' in food_inspection_case:
+					if round(float(food_inspection_case['latitude']),6) == blats and round(float(food_inspection_case['longitude']),6) == blons:
+						business[latitude_chibiz] = str(business[latitude_chibiz])
+						business[longitude_chibiz] = str(business[longitude_chibiz])
+						food_inspection_case['latitude'] = str(food_inspection_case['latitude'])
+						food_inspection_case['longitude'] = str(food_inspection_case['longitude'])
+						bulk = [x[1] for x in food_inspection_case.items() if not (type(x[1]) is dict)]
+						compared_data.append((business[dba_name_chibiz],business,[],bulk))
+	return (compared_data, oshadata)
 
 def findAllAtLatsAndLons():
     biz_at_lat = []
@@ -185,24 +131,40 @@ def findAllAtLatsAndLons():
     for j in oshalons:
         oshaloforcomp.append(float(j[0]))
     for i in biz_data:
-        blats = round(float(i[lats]),2)
-        blons = round(float(i[lons]),2)
+        blats = round(float(i[longitude_chibiz]),2)
+        blons = round(float(i[longitude_chibiz]),2)
         if (blats in set(oshalaforcomp)) and (blons in set(oshaloforcomp)):
             for j in oshadata:
                 same_coords = (j[9] == blats and j[10] == blons)
-                if "university" in i[names].lower() and "university" in j[osha_names].lower():
-	            	print align_strings(i[names], j[osha_names])
-                align_score = align_strings(i[names], j[osha_names])[0]
+                if "university" in i[dba_name_chibiz].lower() and "university" in j[dba_name_osha].lower():
+	            	print align_strings(i[dba_name_chibiz], j[dba_name_osha])
+                align_score = align_strings(i[dba_name_chibiz], j[dba_name_osha])[0]
                 same_name = align_score > score_thresh
                 if same_coords and same_name:
-                    i[lats] = str(i[lats])
-                    i[lons] = str(i[lons])
+                    i[latitude_chibiz] = str(i[latitude_chibiz])
+                    i[longitude_chibiz] = str(i[longitude_chibiz])
                     j[9] = str(j[9])
                     j[10] = str(j[10])
-                    biz_at_lat.append((i[lats], (i[names], i, j, [])))
-
-                    #print i[names], j[9], blats, i, j
+                    biz_at_lat.append((i[latitude_chibiz], (i[dba_name_chibiz], i, j, [])))
     return (biz_at_lat, oshadata)
 
+def compileDataWithFrequencies():
+	(cross_refed, oshadata) = crossReferenceDatabases()
+	dba_name_chibiz = []
+	final1 = []
+	final = ""
+	for i in oshadata:
+		if isFloat(i[9]) and isFloat(i[10]):
+			i[9] = str(i[9])
+			i[10] = str(i[10])
+	for item in cross_refed:
+		dba_name_chibiz.append(item[0])
+	for i in cross_refed:
+		bulk = [[str(dba_name_chibiz.count(i[0]))] + i[1] + i[2] + i[3]]
+		final1.append(bulk)
+	for j in final1:
+		final = final + (','.join(j[0])) + '\n'
+	return final
+
 findAllAtLatsAndLons()
-outputdata.write(countUpViolators())
+output_file.write(compileDataWithFrequencies())
