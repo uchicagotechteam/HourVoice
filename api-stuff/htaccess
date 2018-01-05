@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^api/(city|country|countrylanguage)/?$ index.php?type=$1 [NC,L]
+    RewriteRule ^api/(city|country|countrylanguage)/(.+?)/(.+?)$ index.php?type=$1&$2=$3 [NC,L]
+</IfModule>
