@@ -41,16 +41,17 @@
 
 	<table id="myTable">
 	  <tr class="header">
-	    <th style="width:33%;" onclick="sortTable(0)">Employer</th>
-	    <th style="width:27%;" onclick="sortTable(1)">Address</th>
-	    <th style="width:15%" onclick="sortTable(2)">City</th>
-	    <th style="width:15%" onclick="sortTable(3)">Hourvoice Members</th>
-	    <th style="width:10%;" onclick="sortTable(4)">Score</th>
+	    <th style="width:33%;" onclick="sortTable(0)" id="h">Employer</th>
+	    <th style="width:27%;" onclick="sortTable(1)" id="h">Address</th>
+	    <th style="width:15%" onclick="sortTable(2)" id="h">City</th>
+	    <th style="width:15%" onclick="sortTable(3)" id="h">Hourvoice Members</th>
+	    <th style="width:10%;" onclick="sortTable(4)" id="h">Score</th>
 	  </tr>
 	</table>
 
 	<script>
 		var business_info = []
+
 
 		$.ajax({
 			url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
@@ -61,15 +62,37 @@
 			}
 		}).done(function(data) {
 			business_info = data;
-			console.log(business_info);
 			var table=document.getElementById("myTable");
 			$.each(business_info, function(i, business){
 				var row = table.insertRow(i+1);
-				row.insertCell(0).innerHTML=business.doing_business_as_name.toLowerCase();
-				row.insertCell(1).innerHTML=business.address.toLowerCase();
-				row.insertCell(2).innerHTML=business.city.toLowerCase();
-				row.insertCell(3).innerHTML=Math.floor(Math.random() * 50);
-				row.insertCell(4).innerHTML=Math.floor(Math.random() * 100);
+				var business_name = business.doing_business_as_name.toLowerCase();
+
+				var cell = row.insertCell(0);
+				cell.id = business_name;
+				cell.innerHTML=business_name;
+				cell = row.insertCell(1);
+				cell.id = business_name;
+				cell.innerHTML=business.address.toLowerCase();
+				cell = row.insertCell(2);
+				cell.id = business_name;
+				cell.innerHTML=business.city.toLowerCase();
+				cell = row.insertCell(3);
+				cell.id = business_name;
+				cell.innerHTML=Math.floor(Math.random() * 50);
+				cell = row.insertCell(4);
+				cell.id = business_name;
+				cell.innerHTML=Math.floor(Math.random() * 100);
+
+			});
+
+			$("tr").click(function(event) {
+				var id = event.target.id;
+				if (id != "h") {
+					console.log(id);
+
+					url = '../company_example/index.html';
+					document.location.href = url;
+				}
 			});
 
 		});
@@ -81,7 +104,10 @@
 		    fillOpacity: 0.5,
 		    radius: 30
 		}).addTo(mymap);
+
+
 	</script>
+
 
 
 	<script>
@@ -161,6 +187,8 @@
 		  }
 		}
 	</script>
+
+
 </body>
 
 </html>
