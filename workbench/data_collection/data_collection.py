@@ -19,20 +19,30 @@ repeated_food_headers = [':@computed_region_bdys_3d7i', ':@computed_region_43wa_
 
 found = {}
 
+indices = {}
+
 for case1 in food_inspection_data:
     for case2 in food_inspection_data:
         if cmp(case1,case2) != 0:
             if 'latitude' in case1 and 'latitude' in case2 and 'longitude' in case1 and 'longitude' in case2 and case1['latitude'] == case2['latitude'] and case2['longitude'] == case1['longitude']:
                     if 'dba_name' in case1 and 'dba_name' in case2:
-                        food_align_score = align_strings(case1['dba_name'], case2['dba_name'])[0]
-                        if food_align_score > score_thresh:
-                            found[(case1['dba_name'])] = {}
+                        c1_name = case1['dba_name']
+                        c2_name = case2['dba_name']
+                        food_align_score = align_strings(c1_name, c2_name)[0]
+                        if c1_name not in found:
+                            found[c1_name] = {}
                             for repeat_header in repeated_food_headers:
                                 if repeat_header in case1:
-                                    found[(case1['dba_name'])].update({repeat_header: case1[repeat_header]})
+                                    found[c1_name].update({repeat_header: case1[repeat_header]})
                             for unique_header in unique_food_headers:
-                                if unique_header in case1 and unique_header in case2:
-                                    found[(case1['dba_name'])].update({unique_header: [case1[unique_header], case2[unique_header]]})
+                                if unique_header in case1:
+                                    found[c1_name].update({unique_header: [case1[unique_header]]})
+                                else:
+                                    found[c1_name][unique_header] = []
+                        if food_align_score > score_thresh:
+                            for unique_header in unique_food_headers:
+                                if unique_header in case2:
+                                    found[c1_name][unique_header].append(case2[unique_header])
 
 all_chicago_businesses = [row for row in csv.reader(open("Business_Licenses.csv", 'r'), delimiter='"')]
 chicago_business_headers = all_chicago_businesses[0][0].split(',')
@@ -42,6 +52,7 @@ osha_headers = osha_data[0]
 
 output_file = open("output.txt", 'w')
 output_file.write(json.dumps(found))
+
 #giving the output file headers
 # output_file.write("Frequency,"
 #                  + all_chicago_businesses[0][0]
