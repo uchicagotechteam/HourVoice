@@ -42,17 +42,18 @@ header{
     height: 125px;
     background-color: "blue";
 }
+
 header .company h2{
     float: left;
     color: #838181;
     font-family: "Helvetica";
     font-size: 40px;
-    margin-top: 50px;
+    margin-top: -5px;
 }
 
 header nav{
     float: right;
-    margin-top: 57px;
+    margin-top: 50px;
 }
 
 
