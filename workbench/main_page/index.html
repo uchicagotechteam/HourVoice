@@ -20,6 +20,7 @@
 <body>
 
 	<header class="wrapper dark">
+
 		<div class="company">
 			<h2 id="company_name"><img src="logo.png"></h2>
 		</div>
@@ -33,23 +34,27 @@
 		</nav>
 	</header>
 
-	<section class="services wrapper">
-		<input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Enter a business name">
+	<section class="services">
+		<section class="wrapper">
 
-		<div id="mapid"></div>
-		<script>
-			var mymap = L.map('mapid').setView([41.8781, -87.6298], 13);
+			<h2>Search</h2>
 
-			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
-			    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-			    maxZoom: 18,
-			    id: 'mapbox.streets',
-			    accessToken: 'pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA'
-			}).addTo(mymap);
+			<input type="text" id="myInput" onkeyup="searchFunction()" placeholder="Enter a business name">
 
-		</script>
+			<div id="mapid"></div>
+			<script>
+				var mymap = L.map('mapid').setView([41.8781, -87.6298], 13);
 
-	</section><!--  End services  -->
+				L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
+				    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				    maxZoom: 18,
+				    id: 'mapbox.streets',
+				    accessToken: 'pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA'
+				}).addTo(mymap);
+
+			</script>
+		</section>
+	</section>
 
 	<script>
 		window.onload = function() {
@@ -70,10 +75,10 @@
 	</script>
 
 
-	<section class="testimonials wrapper">
+	<section class="testimonials">
+		<section class="wrapper">
 		<div class="title animated wow fadeIn">
 			<h2>Index of Companies</h2>
-			<hr class="separator"/>
 		</div>
 
 		<table id="myTable">
@@ -232,6 +237,7 @@
 			  }
 			}
 		</script>
+	</section>
 	</section><!--  End testimonials  -->
 
 
