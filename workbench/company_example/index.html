@@ -5,9 +5,9 @@
 	<meta charset="utf-8">
 
 	
-	<link rel="stylesheet" type="text/css" href="reset.css">
-	<link rel="stylesheet" type="text/css" href="animate.css">
-	<link rel="stylesheet" type="text/css" href="main.css">
+	<link rel="stylesheet" type="text/css" href="company_reset.css">
+	<link rel="stylesheet" type="text/css" href="company_animate.css">
+	<link rel="stylesheet" type="text/css" href="company_main.css">
 
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
    integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
@@ -23,7 +23,7 @@
 
 	<header class="wrapper dark">
 		<div class="company">
-			<h2>Company Name</h2>
+			<h2 id="company_name">Company Name</h2>
 		</div>
 		<nav>
 			<ul>
@@ -84,6 +84,24 @@
 			</li>
 		</ul>
 	</section><!--  End services  -->
+
+	<script>
+		window.onload = function() {
+			var url = document.location.href,
+        	params = url.split('?')[1].split('=');
+        	url = params[1];
+        	var name = "";
+        	for (i=0; i<url.length; i++) {
+        		if (url[i] == '_') {
+        			name += " ";
+        		} else {
+        			name += url[i];
+        		}
+        	}
+        	document.getElementById('company_name').innerHTML = name;
+        	console.log(name)
+		}
+	</script>
 
 
 	<section class="testimonials wrapper">

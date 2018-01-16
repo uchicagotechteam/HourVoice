@@ -1,28 +1,136 @@
-body{
-    font-family: "Verdana";
+/*  General CSS*/
+
+.wrapper{
+    width: 1100px;
+    margin: 0 auto;
 }
 
-li {
-    display: inline;
-    width: 60px;
-    float: left;
+h1, h2, h3, h4, h5 ,h6{
+    color: #626262;
+    font-family: "Helvetica", arial;
+    letter-spacing: 1px;
 }
 
-ul {
-    list-style-type: none;
-    margin: 10px;
-    padding: 10px;
-    overflow: hidden;
-    background-color: #333;
-}
+h1              { font-size: 2em; margin: .67em 0 }
+h2              { font-size: 1.5em; margin: .75em 0 }
+h3              { font-size: 1.17em; margin: .83em 0 }
+h5              { font-size: .83em; margin: 1.5em 0 }
+h6              { font-size: .75em; margin: 1.67em 0 }
+h1, h2, h3, h4,
+h5, h6          { font-weight: bolder }
 
-li a {
-	display: block;
-    color: white;
+
+
+.title{
     text-align: center;
-    font-size: 15px;
-    padding: 14px 16px;
-    text-decoration: none;
+    overflow: hidden;
+}
+
+.title h2{
+    color: #616161;
+    font-family: "Helvetica";
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+}
+
+.title h3{
+    color: #9b9b9b;
+    font-family: "Helvetica";
+    font-size: 14px;
+    margin: 0 0 20px 0;
+    font-weight: normal!important;
+}
+
+.title hr.separator{
+    display: block;
+    width: 40px;
+    height: 1px;
+    background-color: #ebebeb;
+    margin: 0 auto;
+    padding: 0;
+    border: 0!important;
+}
+
+
+.clearfix:before,  
+.clearfix:after {  
+    content: " ";  
+    display: table;  
+}  
+.clearfix:after {  
+    clear: both;  
+}  
+ 
+.clearfix {  
+    *zoom: 1;  
+}
+
+
+/*    header    */
+header{
+    width: 100%;
+    height: 125px;
+    background-color: "blue";
+}
+
+header .company h2{
+    float: left;
+    color: #838181;
+    font-family: "Helvetica";
+    font-size: 40px;
+    margin-top: -5px;
+    /*margin-top: 50px;*/
+}
+
+header nav{
+    float: right;
+    margin-top: 50px;
+}
+
+
+header nav ul li{
+    list-style: none;
+    display: block;
+    float: left;
+    margin-left: 50px;
+}
+
+header nav ul li a{
+    text-decoration: none;  
+    font-family: "Helvetica";
+    font-size: 14px;
+
+    transition:all .2s linear;
+    -webkit-transition:all .2s linear;
+    -moz-transition:all .2s linear;
+    -o-transition:all .2s linear;
+}
+
+header.dark nav ul li a{  
+    color: #5d5d5d;
+}
+
+header.dark nav ul li a:hover{
+    color: #919191;
+}
+
+
+.services{
+    background-color: teal;
+    padding-bottom:50px;
+}
+
+.services h2{
+    color: #616161;
+    font-family: "Helvetica";
+    font-size: 30px;
+    font-weight: bold;
+    padding-top:30px;
+    color: white;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
 }
 
 #mapid { height: 250px; }
@@ -30,20 +138,34 @@ li a {
 #myInput {
     background-position: 10px 12px; 
     background-repeat: no-repeat;
-    width: 100%; 
+    width: 100%;
     font-size: 16px; 
-    padding: 12px 20px 12px 40px; 
+    padding-top: 12px;
+    padding-left: 12px;
+    padding-bottom: 12px;
     border: 1px solid #ddd; 
     margin-bottom: 12px; 
     margin-top: 2px;
 }
 
+
+/*    testimonials    */
+.testimonials{
+    background-color: #B0C4DE;
+    padding-bottom: 50px;
+}
+
+.testimonials h2{
+    margin-top: 50px;
+}
+
 #myTable {
     border-collapse: collapse; /* Collapse borders */
     width: 100%; /* Full-width */
-    border: 1px solid #ddd; /* Add a grey border */
+    border: 2px solid #616161; /* Add a grey border */
     font-size: 14px; /* Increase font-size */
-    font-color:
+    font-family: "Helvetica";
+    color: #616161;
 }
 
 #myTable th, #myTable td {
@@ -53,10 +175,67 @@ li a {
 
 #myTable tr {
     /* Add a bottom border to all table rows */
-    border-bottom: 1px solid #ddd; 
+    border-bottom: 2px solid #616161; 
 }
 
 #myTable tr.header, #myTable tr:hover {
     /* Add a grey background color to the table header and on hover */
-    background-color: #f1f1f1;
+    font-size: 16px;
+}
+
+
+
+
+/*    footer    */
+footer{
+    padding: 35px 0;
+    overflow: hidden;
+}
+
+footer .footer_logo{
+    float: left;
+}
+
+footer .rights p{
+    float: left;
+    color: #838181;
+    font-family: "Helvetica";
+    font-size: 13px;
+    margin: 5px 0 0 40px; 
+}
+
+footer .rights p a{
+    color: #777;
+    font-family: "Helvetica";
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+footer nav ul{
+    float: right;
+    overflow: hidden;
+    list-style: none;
+    margin-top: 5px; 
+}
+
+footer nav ul li{
+    float: left;
+    margin-left: 25px;
+}
+
+footer nav ul li a{
+    color: #838181;
+    font-family: "Helvetica";
+    font-size: 13px;
+    text-decoration: none;
+
+    transition:all .2s linear;
+    -webkit-transition:all .2s linear;
+    -moz-transition:all .2s linear;
+    -o-transition:all .2s linear;
+}
+
+footer nav ul li a:hover{
+    color: #616161;
 }
