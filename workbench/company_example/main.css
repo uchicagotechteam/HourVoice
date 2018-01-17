@@ -154,7 +154,7 @@ header.dark nav ul li a:hover{
 }
 
 .services h2{
-    padding-top: 30px;
+    padding-top: 40px;
     padding-bottom: 20px;
     color: white;
     font-family: "Helvetica";
@@ -174,13 +174,10 @@ header.dark nav ul li a:hover{
     display: block;
     width: 313px;
     float: left;
-    margin-left: 80px;
+    margin-left: 70px;
     text-align: center;
 }
 
-.services ul li:first-child{
-    margin-left: 0;
-}
 
 .services ul li .separator{
     width: 1px;
@@ -277,8 +274,9 @@ header.dark nav ul li a:hover{
     font-size: 50px;
 }
 
+#violations {
 
-
+}
 /*    testimonials    */
 .testimonials{
     padding-top: 100px;
@@ -299,9 +297,6 @@ header.dark nav ul li a:hover{
     width: 313px;
 }
 
-.testimonials ul li:first-child{
-    margin-left: 0;
-}
 
 .testimonials ul li .quotes{
     margin-right: 10px;
