@@ -41,16 +41,27 @@
 	<section class="basic wrapper">
 		<div class="title animated wow fadeIn">
 			<h2>About the Company</h2>
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempus dictum metus non bibendum. Maecenas molestie arcu quis felis viverra, a luctus velit elementum. Pellentesque vitae magna augue. Proin interdum mi id nibh luctus, a convallis nisi venenatis. Sed eget egestas ipsum, ac ornare massa. Nunc porta vel nisl ut tincidunt. Donec a viverra massa. Phasellus fermentum lectus mauris, vestibulum vehicula metus tristique vel. Suspendisse ut sapien ut nulla porta rutrum. Aenean pulvinar magna vitae blandit tempor. Ut ultrices nisi nec posuere suscipit. Donec ut sapien pellentesque, tincidunt purus non, sollicitudin turpis. Curabitur egestas sem a mi accumsan semper. Cras eu libero rhoncus, efficitur turpis ac, venenatis dolor. Fusce congue cursus consequat.</p>
 		</div>
 		<div class="info">
-			<h4>Address</h4>
-			<p id="address">hello</p>
-			<h4>Industry</h4>
-			<p id="industry">hello</p>
-			<h4>Business License ID</h4>
-			<p id="license-id">hello</p>
-			<h4>Manager</h4>
-			<p id="owner">hello</p>
+			<ul class="clearfix">
+				<li class="animated wow fadeInDown">
+					<h4>Address</h4>
+					<p id="address">hello</p>
+				</li>
+				<li class="animated wow fadeInDown">
+					<h4>Industry</h4>
+					<p id="industry">hello</p>
+				</li>
+				<li class="animated wow fadeInDown">
+					<h4>Business License</h4>
+					<p id="license-id">hello</p>
+				</li>
+				<li class="animated wow fadeInDown">
+					<h4>Manager</h4>
+					<p id="owner">hello</p>
+				</li>
+			</ul>
 		</div>
 	</section>
 
@@ -68,6 +79,7 @@
 					$.getJSON(companies, function(data) {
 						latitude = data["data"][0].latitude;
 						longitude=data["data"][0].longitude;
+						console.log(data["data"][0]);
 					}).done(function(data) {
 						var mymap = L.map('mapid').setView([latitude, longitude], 13);
 
@@ -277,6 +289,27 @@
 				<h2>Median Wage</h2>
 			</li>
 		</ul>
+	</section>
+	<section class="labor wrapper">
+		<ul class="clearfix">
+
+			<li class="animated wow fadeInDown">
+				<div id="backwages"></div>
+				<script>
+					var companies = 'http://stopwagetheft.stanford.edu/api/v1/cases?&limit=1&columns=employees_owed_backwages';
+					
+					$.getJSON(companies, function(data) {
+						document.getElementById('backwages').innerHTML=data["data"][0].employees_owed_backwages;
+					});
+				</script>
+				<h2>Employees Owed Backwages</h2>
+			</li>
+			<li class="animated wow fadeInDown">
+				<div id="violations"></div>
+				<h2>Violations Reported</h2>
+			</li>
+		</ul>
+
 	</section>
 
 	<script>

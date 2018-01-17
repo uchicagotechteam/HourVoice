@@ -4,7 +4,7 @@ body{
 }
 
 .wrapper{
-    width: 1100px;
+    width: 1200px;
     margin: 0 auto;
 }
 
@@ -40,8 +40,6 @@ h5, h6          { font-weight: bolder }
 header{
     width: 100%;
     height: 125px;
-    background-color: "blue";
-    padding-bottom: 40px;
 }
 header .company h2{
     float: left;
@@ -88,13 +86,20 @@ header.dark nav ul li a:hover{
 .basic{
     background-color: #B0C4DE;
     padding-bottom: 50px;
-    padding-top: 40px;
+    padding-top: 50px;
     padding-right: 40px;
     padding-left: 40px;
 }
 
 .basic h2{
-    margin-top: 20px;
+    margin-top: 40px;
+}
+
+.basic p {
+    font-family: "helvetica";
+    font-size: 14px;
+    color: #616161;
+    padding-bottom: 30px;
 }
 
 .info p{
@@ -104,6 +109,16 @@ header.dark nav ul li a:hover{
     padding-top: 5px;
     padding-bottom:10px;
 }
+
+.info ul li{
+    list-style: none;
+    display: block;
+    width: 200px;
+    float: left;
+    margin-left: 80px;
+    text-align: center;
+}
+
 
 .pie text {
   font-family: "Helvetica";
@@ -226,8 +241,41 @@ header.dark nav ul li a:hover{
 }
 
 
+.labor{
+    background-color: teal;
+    padding-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-bottom: 40px;
+}
 
 
+.labor ul li{
+    list-style: none;
+    display: block;
+    width: 500px;
+    float: left;
+    margin-left: 80px;
+    text-align: center;
+}
+
+.labor h2{  
+    color: white;
+    font-family: "Helvetica";
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+#backwages {
+    text-align: center;
+    font-family: "Helvetica";
+    margin-bottom: 20px;
+    color: white;
+    font-size: 50px;
+}
 
 
 
