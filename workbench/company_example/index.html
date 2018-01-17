@@ -60,10 +60,38 @@
 					<p id="license-id">hello</p>
 				</li>
 				<li class="animated wow fadeInDown">
-					<h4>Manager</h4>
+					<h4>Owner</h4>
 					<p id="owner">hello</p>
 				</li>
 			</ul>
+			<script>
+				$.ajax({
+					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
+					type: "GET",
+					data: {
+						"$limit": 1,
+						"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
+					}
+				}).done(function(data) {
+					document.getElementById('address').innerHTML = data[0].address + ", " + data[0].city +", " + data[0].state + " " + data[0].zip_code;
+					document.getElementById('license-id').innerHTML = data[0].license_id;
+					var account_num = data[0].account_number;
+					console.log(data);
+
+					$.ajax({
+						url: "https://data.cityofchicago.org/resource/cwcw-dfrk.json?account_number=" + account_num,
+						type: "GET",
+						data: {
+							"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
+						}
+					}).done(function(dd) {
+						document.getElementById('owner').innerHTML = dd[0].owner_first_name + " " + dd[0].owner_middle_initial + " " + dd[0].owner_last_name;
+						console.log(dd);
+					});
+
+				});
+
+			</script>
 		</div>
 	</section>
 
@@ -73,33 +101,6 @@
 		<ul class="clearfix">
 			<li class="animated wow fadeInDown">
 				<div id="mapid"></div>
-				<script>
-					var companies = 'http://stopwagetheft.stanford.edu/api/v1/cases?&limit=1&columns=employees_owed_backwages,legal_name,latitude,longitude';
-					var latitude = 0;
-					var longitude = 0;
-					
-					$.getJSON(companies, function(data) {
-						latitude = data["data"][0].latitude;
-						longitude=data["data"][0].longitude;
-						console.log(data["data"][0]);
-					}).done(function(data) {
-						var mymap = L.map('mapid').setView([latitude, longitude], 13);
-
-						L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
-						    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-						    maxZoom: 18,
-						    id: 'mapbox.streets',
-						    accessToken: 'pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA'
-						}).addTo(mymap);
-
-						var circle = L.circle([latitude, longitude], {
-						    color: 'red',
-						    fillColor: '#f03',
-						    fillOpacity: 0.5,
-						    radius: 200
-						}).addTo(mymap);
-					});
-				</script>
 				<span class="separator"></span>
 				<h2>Location</h2>
 			</li>
@@ -305,11 +306,33 @@
 			<li class="animated wow fadeInDown">
 				<div id="backwages"></div>
 				<script>
-					var companies = 'http://stopwagetheft.stanford.edu/api/v1/cases?&limit=1&columns=employees_owed_backwages';
+					var companies = 'http://stopwagetheft.stanford.edu/api/v1/cases?&limit=1&columns=employees_owed_backwages,legal_name,latitude,longitude';
+					var latitude = 0;
+					var longitude = 0;
 					
 					$.getJSON(companies, function(data) {
+						latitude = data["data"][0].latitude;
+						longitude=data["data"][0].longitude;
 						document.getElementById('backwages').innerHTML=data["data"][0].employees_owed_backwages;
+					}).done(function(data) {
+						var mymap = L.map('mapid').setView([latitude, longitude], 13);
+
+						L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
+						    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+						    maxZoom: 18,
+						    id: 'mapbox.streets',
+						    accessToken: 'pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA'
+						}).addTo(mymap);
+
+						var circle = L.circle([latitude, longitude], {
+						    color: 'red',
+						    fillColor: '#f03',
+						    fillOpacity: 0.5,
+						    radius: 200
+						}).addTo(mymap);
 					});
+
+				
 				</script>
 				<h2>Employees Owed Backwages</h2>
 			</li>
