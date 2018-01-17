@@ -106,8 +106,8 @@ header.dark nav ul li a:hover{
 }
 
 .pie text {
-  font-family: "Verdana";
-  fill: #888;
+  font-family: "Helvetica";
+  fill: white;
 }
 
 .pie .name-text{

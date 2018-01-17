@@ -93,10 +93,11 @@
 				<div id ="rating"></div>
 				<script>
 					var data = [
-					  {name: "USA", value: 40},
-					  {name: "UK", value: 20},
-					  {name: "Canada", value: 30},
-					  {name: "Maxico", value: 10},
+					  {name: "1", value: 40},
+					  {name: "2", value: 20},
+					  {name: "3", value: 30},
+					  {name: "4", value: 10},
+					  {name: "5", value: 9}
 					];
 					var text = "";
 
@@ -106,7 +107,7 @@
 					var duration = 750;
 
 					var radius = Math.min(width, height) / 2;
-					var color = d3.scaleOrdinal(d3.schemeCategory10);
+					var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 					var svg = d3.select("#rating")
 					.append('svg')
@@ -160,7 +161,7 @@
 					  .on("mouseover", function(d) {
 					      d3.select(this)     
 					        .style("cursor", "pointer")
-					        .style("fill", "black");
+					        .style("fill", "white");
 					    })
 					  .on("mouseout", function(d) {
 					      d3.select(this)
