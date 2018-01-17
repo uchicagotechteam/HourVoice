@@ -45,8 +45,8 @@ header .company h2{
     float: left;
     color: #838181;
     font-family: "Helvetica";
-    font-size: 40px;
-    margin-top: 50px;
+    font-size: 50px;
+    margin-top: 40px;
 }
 
 header nav{
@@ -155,7 +155,7 @@ header.dark nav ul li a:hover{
 
 .services h2{
     padding-top: 40px;
-    padding-bottom: 20px;
+    padding-bottom: 40px;
     color: white;
     font-family: "Helvetica";
     font-size: 30px;
@@ -163,6 +163,7 @@ header.dark nav ul li a:hover{
     margin: 0 0 20px 0;
     text-transform: uppercase;
     text-align: center;
+
 }
 
 .services ul{
@@ -275,7 +276,11 @@ header.dark nav ul li a:hover{
 }
 
 #violations {
-
+    text-align: center;
+    font-family: "Helvetica";
+    margin-bottom: 20px;
+    color: white;
+    font-size: 50px;
 }
 /*    testimonials    */
 .testimonials{
