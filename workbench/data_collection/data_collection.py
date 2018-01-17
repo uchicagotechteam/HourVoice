@@ -67,29 +67,31 @@ def combine_data_by_dbaname(unique_headers, repeated_headers, dba_header, lat_he
                                     for unique_header in unique_headers:
                                         if unique_header in case2:
                                             combined_data[c1_name][unique_header].append(case2[unique_header])
-    return found
+    return combined_data
 
-def count_frequency(db1, db1_dbaheader, db1_unique_header, db2, db2_dbaheader, db2_unique_header):
+def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_name, db2_dbaheader, db2_unique_header):
     frequency_data = {}
     for case1 in db1:
-        frequency_data[case1] = db1[case1]
-        frequency_data[case1]["Frequency"] = len(frequency_data[case1][db1_unique_header])
+        frequency_data[case1] = {}
+        frequency_data[case1][db1_name] = db1[case1]
+        frequency_data[case1]["Frequency"] = len(frequency_data[case1][db1_name][db1_unique_header])
         for case2 in db2:
             align_score = align_strings(case1, case2)[0]
             if align_score > score_thresh:
-                frequency_data[case1]["Frequency"] += len(frequency_data[case2][db2_unique_header])
-                frequency_data[case1].update(db2[case2])
+                frequency_data[case1]["Frequency"] += len(frequency_data[case2][db2_name][db2_unique_header])
+                frequency_data[case1][db2_name] = db2[case2]
                 print case1, case2
             else:
-                frequency_data[case2] = db2[case2]
-                frequency_data[case2]["Frequency"] = len(frequency_data[case2][db2_unique_header])
+                frequency_data[case2] = {}
+                frequency_data[case2][db2_name] = db2[case2]
+                frequency_data[case2]["Frequency"] = len(frequency_data[case2][db2_name][db2_unique_header])
     return frequency_data
 
 
 food_json = combine_data_by_dbaname(unique_food_headers, repeated_food_headers, 'dba_name', 'latitude', 'longitude', food_inspection_data)
 osha_json = combine_data_by_dbaname(unique_osha_headers, repeated_osha_headers, 'Employer', 'Latitude', 'Longitude', osha_injury_data)
 
-combined_databases = count_frequency(food_json, 'dba_name', 'inspection_date', osha_json, 'Employer', 'ID')
+combined_databases = count_frequency(food_json, "food_inspection", 'dba_name', 'inspection_date', osha_json, "OSHA", 'Employer', 'ID')
 
 output_file = open("output.txt", 'w')
 output_file.write(json.dumps(combined_databases))
