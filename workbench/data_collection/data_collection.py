@@ -57,16 +57,16 @@ def combine_data_by_dbaname(unique_headers, repeated_headers, dba_header, lat_he
                     c2_name = case2[dba_header]
                     c1_hv_id = case1["hourvoice_id"]
                     c2_hv_id = case2["hourvoice_id"]
-                    if c1_hv_id not in combined_data:
-                        combined_data[c1_hv_id] = {"hourvoice_id": c1_hv_id}
+                    if c1_name not in combined_data:
+                        combined_data[c1_name] = {"hourvoice_id": c1_hv_id}
                         for repeat_header in repeated_headers:
                             if repeat_header in case1:
-                                combined_data[c1_hv_id].update({repeat_header: case1[repeat_header]})
+                                combined_data[c1_name].update({repeat_header: case1[repeat_header]})
                         for unique_header in unique_headers:
                             if unique_header in case1:
-                                combined_data[c1_hv_id].update({unique_header: [case1[unique_header]]})
+                                combined_data[c1_name].update({unique_header: [case1[unique_header]]})
                             else:
-                                combined_data[c1_hv_id][unique_header] = []
+                                combined_data[c1_name][unique_header] = []
                     lats_included = lat_header in case1 and lat_header in case2
                     lons_included = lon_header in case1 and lon_header in case2
                     if lats_included and lons_included:
@@ -77,7 +77,8 @@ def combine_data_by_dbaname(unique_headers, repeated_headers, dba_header, lat_he
                             if align_score > score_thresh:
                                 for unique_header in unique_headers:
                                     if unique_header in case2:
-                                        combined_data[c1_hv_id][unique_header].append(case2[unique_header])
+                                        combined_data[c1_name][unique_header].append(case2[unique_header])
+                                del case2
     return combined_data
 
 def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_name, db2_dbaheader, db2_unique_header):
@@ -91,7 +92,6 @@ def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_na
             if align_score > score_thresh:
                 frequency_data[case1]["Frequency"] += len(frequency_data[case2][db2_name][db2_unique_header])
                 frequency_data[case1][db2_name] = db2[case2]
-                print case1, case2
             else:
                 frequency_data[case2] = {}
                 frequency_data[case2][db2_name] = db2[case2]
