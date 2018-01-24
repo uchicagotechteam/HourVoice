@@ -44,6 +44,8 @@
 
 			<div id="mapid"></div>
 			<script>
+				//view currently set to chicago's latitude + longitude
+
 				var mymap = L.map('mapid').setView([41.8781, -87.6298], 13);
 
 				L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
@@ -79,168 +81,169 @@
 
 	<section class="companies">
 		<section class="wrapper">
-		<div class="title animated wow fadeIn">
-			<h2>Index of Companies</h2>
-		</div>
+			<div class="title animated wow fadeIn">
+				<h2>Index of Companies</h2>
+			</div>
 
-		<table id="myTable">
-		  <tr class="header">
-		    <th style="width:33%;" onclick="sortTable(0)" id="h">Employer</th>
-		    <th style="width:27%;" onclick="sortTable(1)" id="h">Address</th>
-		    <th style="width:15%" onclick="sortTable(2)" id="h">City</th>
-		    <th style="width:15%" onclick="sortTable(3)" id="h">Hourvoice Members</th>
-		    <th style="width:10%;" onclick="sortTable(4)" id="h">Score</th>
-		  </tr>
-		</table>
+			<table id="myTable">
+			  <tr class="header">
+			    <th style="width:33%;" onclick="sortTable(0)" id="h">Employer</th>
+			    <th style="width:27%;" onclick="sortTable(1)" id="h">Address</th>
+			    <th style="width:15%" onclick="sortTable(2)" id="h">City</th>
+			    <th style="width:15%" onclick="sortTable(3)" id="h">Hourvoice Members</th>
+			    <th style="width:10%;" onclick="sortTable(4)" id="h">Score</th>
+			  </tr>
+			</table>
 
-		<script>
-			var business_info = []
+			<script>
+				var business_info = []
 
+				//dynamically populates table above with data being pulled below
 
-			$.ajax({
-				url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
-				type: "GET",
-				data: {
-					"$limit": 10,
-					"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
-				}
-			}).done(function(data) {
-				business_info = data;
-				var table=document.getElementById("myTable");
-				$.each(business_info, function(i, business){
-					var row = table.insertRow(i+1);
-					var business_name = business.doing_business_as_name.toLowerCase();
-
-					var cell = row.insertCell(0);
-					cell.id = business_name;
-					cell.innerHTML=business_name;
-					cell = row.insertCell(1);
-					cell.id = business_name;
-					cell.innerHTML=business.address.toLowerCase();
-					cell = row.insertCell(2);
-					cell.id = business_name;
-					cell.innerHTML=business.city.toLowerCase();
-					cell = row.insertCell(3);
-					cell.id = business_name;
-					cell.innerHTML=Math.floor(Math.random() * 50);
-					cell = row.insertCell(4);
-					cell.id = business_name;
-					cell.innerHTML=Math.floor(Math.random() * 100);
-
-				});
-
-				$("tr").click(function(event) {
-					var id = event.target.id;
-					var temp="";
-					if (id != "h") {
-						for (i=0; i<id.length; i++) {
-							if (id[i] != ' ') {
-								temp+=id[i];
-							} else {
-								temp+='_'
-							}
-						}
-						console.log(temp);
-
-						url = '../company_index.html?name=' + temp;
-						document.location.href = url;
+				$.ajax({
+					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
+					type: "GET",
+					data: {
+						"$limit": 10,
+						"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
 					}
+				}).done(function(data) {
+					business_info = data;
+					var table=document.getElementById("myTable");
+					$.each(business_info, function(i, business){
+						var row = table.insertRow(i+1);
+						var business_name = business.doing_business_as_name.toLowerCase();
+
+						var cell = row.insertCell(0);
+						cell.id = business_name;
+						cell.innerHTML=business_name;
+						cell = row.insertCell(1);
+						cell.id = business_name;
+						cell.innerHTML=business.address.toLowerCase();
+						cell = row.insertCell(2);
+						cell.id = business_name;
+						cell.innerHTML=business.city.toLowerCase();
+						cell = row.insertCell(3);
+						cell.id = business_name;
+						cell.innerHTML=Math.floor(Math.random() * 50);
+						cell = row.insertCell(4);
+						cell.id = business_name;
+						cell.innerHTML=Math.floor(Math.random() * 100);
+
+					});
+
+					$("tr").click(function(event) {
+						var id = event.target.id;
+						var temp="";
+						if (id != "h") {
+							for (i=0; i<id.length; i++) {
+								if (id[i] != ' ') {
+									temp+=id[i];
+								} else {
+									temp+='_'
+								}
+							}
+							console.log(temp);
+
+							url = '../company_index.html?name=' + temp;
+							document.location.href = url;
+						}
+					});
+
 				});
-
-			});
-			/*need latitude, longitude data for each business*/
-			var marker = L.marker([41.8781, -87.6298]).addTo(mymap);
-			var circle = L.circle([41.8781, -87.6298], {
-			    color: 'red',
-			    fillColor: '#f03',
-			    fillOpacity: 0.5,
-			    radius: 30
-			}).addTo(mymap);
+				/*need latitude, longitude data for each business, inserted below*/
+				var marker = L.marker([41.8781, -87.6298]).addTo(mymap); 
+				var circle = L.circle([41.8781, -87.6298], {
+				    color: 'red',
+				    fillColor: '#f03',
+				    fillOpacity: 0.5,
+				    radius: 30
+				}).addTo(mymap);
 
 
-		</script>
+			</script>
 
 
 
-		<script>
-			function searchFunction() {
-			  // Declare variables 
-			  var input, filter, table, tr, td, i;
-			  input = document.getElementById("myInput");
-			  filter = input.value.toUpperCase();
-			  table = document.getElementById("myTable");
-			  tr = table.getElementsByTagName("tr");
+			<script>
+				function searchFunction() {
+				  // Declare variables 
+				  var input, filter, table, tr, td, i;
+				  input = document.getElementById("myInput");
+				  filter = input.value.toUpperCase();
+				  table = document.getElementById("myTable");
+				  tr = table.getElementsByTagName("tr");
 
-			  // Loop through all table rows, and hide those who don't match the search query
-			  for (i = 0; i < tr.length; i++) {
-			    td = tr[i].getElementsByTagName("td")[0];
-			    if (td) {
-			      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-			        tr[i].style.display = "";
-			      } else {
-			        tr[i].style.display = "none";
-			      }
-			    }
-			  }
-			}
+				  // Loop through all table rows, and hide those who don't match the search query
+				  for (i = 0; i < tr.length; i++) {
+				    td = tr[i].getElementsByTagName("td")[0];
+				    if (td) {
+				      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+				        tr[i].style.display = "";
+				      } else {
+				        tr[i].style.display = "none";
+				      }
+				    }
+				  }
+				}
 
-			function sortTable(n) {
-			  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-			  table = document.getElementById("myTable");
-			  switching = true;
-			  // Set the sorting direction to ascending:
-			  dir = "asc"; 
-			  /* Make a loop that will continue until
-			  no switching has been done: */
-			  while (switching) {
-			    // Start by saying: no switching is done:
-			    switching = false;
-			    rows = table.getElementsByTagName("TR");
-			    /* Loop through all table rows (except the
-			    first, which contains table headers): */
-			    for (i = 1; i < (rows.length - 1); i++) {
-			      // Start by saying there should be no switching:
-			      shouldSwitch = false;
-			      /* Get the two elements you want to compare,
-			      one from current row and one from the next: */
-			      x = rows[i].getElementsByTagName("TD")[n];
-			      y = rows[i + 1].getElementsByTagName("TD")[n];
-			      /* Check if the two rows should switch place,
-			      based on the direction, asc or desc: */
-			      if (dir == "asc") {
-			        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-			          // If so, mark as a switch and break the loop:
-			          shouldSwitch= true;
-			          break;
-			        }
-			      } else if (dir == "desc") {
-			        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-			          // If so, mark as a switch and break the loop:
-			          shouldSwitch= true;
-			          break;
-			        }
-			      }
-			    }
-			    if (shouldSwitch) {
-			      /* If a switch has been marked, make the switch
-			      and mark that a switch has been done: */
-			      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-			      switching = true;
-			      // Each time a switch is done, increase this count by 1:
-			      switchcount ++; 
-			    } else {
-			      /* If no switching has been done AND the direction is "asc",
-			      set the direction to "desc" and run the while loop again. */
-			      if (switchcount == 0 && dir == "asc") {
-			        dir = "desc";
-			        switching = true;
-			      }
-			    }
-			  }
-			}
-		</script>
+				function sortTable(n) {
+				  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+				  table = document.getElementById("myTable");
+				  switching = true;
+				  // Set the sorting direction to ascending:
+				  dir = "asc"; 
+				  /* Make a loop that will continue until
+				  no switching has been done: */
+				  while (switching) {
+				    // Start by saying: no switching is done:
+				    switching = false;
+				    rows = table.getElementsByTagName("TR");
+				    /* Loop through all table rows (except the
+				    first, which contains table headers): */
+				    for (i = 1; i < (rows.length - 1); i++) {
+				      // Start by saying there should be no switching:
+				      shouldSwitch = false;
+				      /* Get the two elements you want to compare,
+				      one from current row and one from the next: */
+				      x = rows[i].getElementsByTagName("TD")[n];
+				      y = rows[i + 1].getElementsByTagName("TD")[n];
+				      /* Check if the two rows should switch place,
+				      based on the direction, asc or desc: */
+				      if (dir == "asc") {
+				        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+				          // If so, mark as a switch and break the loop:
+				          shouldSwitch= true;
+				          break;
+				        }
+				      } else if (dir == "desc") {
+				        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+				          // If so, mark as a switch and break the loop:
+				          shouldSwitch= true;
+				          break;
+				        }
+				      }
+				    }
+				    if (shouldSwitch) {
+				      /* If a switch has been marked, make the switch
+				      and mark that a switch has been done: */
+				      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+				      switching = true;
+				      // Each time a switch is done, increase this count by 1:
+				      switchcount ++; 
+				    } else {
+				      /* If no switching has been done AND the direction is "asc",
+				      set the direction to "desc" and run the while loop again. */
+				      if (switchcount == 0 && dir == "asc") {
+				        dir = "desc";
+				        switching = true;
+				      }
+				    }
+				  }
+				}
+			</script>
+		</section>
 	</section>
-	</section><!--  End testimonials  -->
 
 
 	<footer>
@@ -257,6 +260,6 @@
 				</ul>
 			</nav>
 		</div>		
-	</footer><!--  End footer  -->
+	</footer>
 </body>
 </html>
