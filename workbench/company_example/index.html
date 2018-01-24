@@ -43,10 +43,12 @@
 	<section class="basic wrapper">
 		<div class="title animated wow fadeIn">
 			<h2>About the Company</h2>
+			<!--filler text that should have short blurb about company or something-->
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempus dictum metus non bibendum. Maecenas molestie arcu quis felis viverra, a luctus velit elementum. Pellentesque vitae magna augue. Proin interdum mi id nibh luctus, a convallis nisi venenatis. Sed eget egestas ipsum, ac ornare massa. Nunc porta vel nisl ut tincidunt. Donec a viverra massa. Phasellus fermentum lectus mauris, vestibulum vehicula metus tristique vel. Suspendisse ut sapien ut nulla porta rutrum. Aenean pulvinar magna vitae blandit tempor. Ut ultrices nisi nec posuere suscipit. Donec ut sapien pellentesque, tincidunt purus non, sollicitudin turpis. Curabitur egestas sem a mi accumsan semper. Cras eu libero rhoncus, efficitur turpis ac, venenatis dolor. Fusce congue cursus consequat.</p>
 		</div>
 		<div class="info">
 			<ul class="clearfix">
+				<!--data should be pulled in script below this to populate the 'hello' text--> 
 				<li class="animated wow fadeInDown">
 					<h4>Address</h4>
 					<p id="address">hello</p>
@@ -65,6 +67,7 @@
 				</li>
 			</ul>
 			<script>
+				//get data here to populate above info
 				$.ajax({
 					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
 					type: "GET",
@@ -96,7 +99,7 @@
 	</section>
 
 
-	<section class="services wrapper">
+	<section class="viz wrapper">
 		<h2>Company Data</h2>
 		<ul class="clearfix">
 			<li class="animated wow fadeInDown">
@@ -114,6 +117,9 @@
 					  {name: "4", value: 10},
 					  {name: "5", value: 9}
 					];
+
+					//should use hourvoice user rating data instead of static data above
+
 					var text = "";
 
 					var width = 300;
@@ -125,65 +131,65 @@
 					var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 					var svg = d3.select("#rating")
-					.append('svg')
-					.attr('class', 'pie')
-					.attr('width', width)
-					.attr('height', height);
+						.append('svg')
+						.attr('class', 'pie')
+						.attr('width', width)
+						.attr('height', height);
 
 					var g = svg.append('g')
-					.attr('transform', 'translate(' + (width/2) + ',' + (height/2) + ')');
+						.attr('transform', 'translate(' + (width/2) + ',' + (height/2) + ')');
 
 					var arc = d3.arc()
-					.innerRadius(radius - thickness)
-					.outerRadius(radius);
+						.innerRadius(radius - thickness)
+						.outerRadius(radius);
 
 					var pie = d3.pie()
-					.value(function(d) { return d.value; })
-					.sort(null);
+						.value(function(d) { return d.value; })
+						.sort(null);
 
 					var path = g.selectAll('path')
-					.data(pie(data))
-					.enter()
-					.append("g")
-					.on("mouseover", function(d) {
-					      let g = d3.select(this)
-					        .style("cursor", "pointer")
-					        .style("fill", "black")
-					        .append("g")
-					        .attr("class", "text-group");
-					 
-					      g.append("text")
-					        .attr("class", "name-text")
-					        .text(`${d.data.name}`)
-					        .attr('text-anchor', 'middle')
-					        .attr('dy', '-1.2em');
-					  
-					      g.append("text")
-					        .attr("class", "value-text")
-					        .text(`${d.data.value}`)
-					        .attr('text-anchor', 'middle')
-					        .attr('dy', '.6em');
-					    })
-					  .on("mouseout", function(d) {
-					      d3.select(this)
-					        .style("cursor", "none")  
-					        .style("fill", color(this._current))
-					        .select(".text-group").remove();
-					    })
-					  .append('path')
-					  .attr('d', arc)
-					  .attr('fill', (d,i) => color(i))
-					  .on("mouseover", function(d) {
-					      d3.select(this)     
-					        .style("cursor", "pointer")
-					        .style("fill", "white");
-					    })
-					  .on("mouseout", function(d) {
-					      d3.select(this)
-					        .style("cursor", "none")  
-					        .style("fill", color(this._current));
-					    })
-					  .each(function(d, i) { this._current = i; });
+						.data(pie(data))
+						.enter()
+						.append("g")
+						.on("mouseover", function(d) {
+						      let g = d3.select(this)
+						        .style("cursor", "pointer")
+						        .style("fill", "black")
+						        .append("g")
+						        .attr("class", "text-group");
+						 
+						      g.append("text")
+						        .attr("class", "name-text")
+						        .text(`${d.data.name}`)
+						        .attr('text-anchor', 'middle')
+						        .attr('dy', '-1.2em');
+						  
+						      g.append("text")
+						        .attr("class", "value-text")
+						        .text(`${d.data.value}`)
+						        .attr('text-anchor', 'middle')
+						        .attr('dy', '.6em');
+						    })
+						  .on("mouseout", function(d) {
+						      d3.select(this)
+						        .style("cursor", "none")  
+						        .style("fill", color(this._current))
+						        .select(".text-group").remove();
+						    })
+						  .append('path')
+						  .attr('d', arc)
+						  .attr('fill', (d,i) => color(i))
+						  .on("mouseover", function(d) {
+						      d3.select(this)     
+						        .style("cursor", "pointer")
+						        .style("fill", "white");
+						    })
+						  .on("mouseout", function(d) {
+						      d3.select(this)
+						        .style("cursor", "none")  
+						        .style("fill", color(this._current));
+						    })
+						  .each(function(d, i) { this._current = i; });
 
 
 					g.append('text')
@@ -198,6 +204,7 @@
 				<div id="wage">
 				</div>
 				<script>
+					//generic bar chart format
 					// Define some sample data
 					var data = [
 					  { value: 14, label: 'Median' },
@@ -386,7 +393,7 @@
 				</p>
 			</li>
 		</ul>
-	</section><!--  End testimonials  -->
+	</section>
 
 
 	<footer>
