@@ -89,7 +89,6 @@
 						}
 					}).done(function(dd) {
 						document.getElementById('owner').innerHTML = dd[0].owner_first_name + " " + dd[0].owner_middle_initial + " " + dd[0].owner_last_name;
-						console.log(dd);
 					});
 
 				});
@@ -104,6 +103,7 @@
 		<ul class="clearfix">
 			<li class="animated wow fadeInDown">
 				<div id="mapid"></div>
+				<!--map is populated in section named 'labor wrapper'-->
 				<span class="separator"></span>
 				<h2>Location</h2>
 			</li>
@@ -298,9 +298,6 @@
 					     .attr('x', function( d, i ) { return (dimensions.gInnerWidth / data.length) * i + dimensions.bMargin; })
 					     .attr('y', function( d, i ) { return dimensions.gInnerHeight - yScale( d.value );})
 
-					     
-      	
-
 				</script>
 				<span class="separator"></span>
 				<h2>Median Wage</h2>
@@ -308,6 +305,7 @@
 		</ul>
 	</section>
 	<section class="labor wrapper">
+		<!--section for labor data visualizations-->
 		<ul class="clearfix">
 
 			<li class="animated wow fadeInDown">
@@ -339,7 +337,6 @@
 						}).addTo(mymap);
 					});
 
-				
 				</script>
 				<h2>Employees Owed Backwages</h2>
 			</li>
@@ -347,6 +344,7 @@
 				<div id="violations"></div>
 				<script>
 					document.getElementById('violations').innerHTML = 5;
+					//pull data from api instead of using '5'
 				</script>
 				<h2>Violations Reported</h2>
 			</li>
@@ -373,7 +371,7 @@
 	</script>
 
 
-	<section class="testimonials wrapper">
+	<section class="reviews wrapper">
 		<div class="title animated wow fadeIn">
 			<h2>User Reviews</h2>
 			<hr class="separator"/>
