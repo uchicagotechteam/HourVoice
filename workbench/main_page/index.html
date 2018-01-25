@@ -4,9 +4,12 @@
 	<title>HourVoice</title>
 	<meta charset="utf-8">
 
-	
+	<!--provides the main CSS styling-->
 	<link rel="stylesheet" type="text/css" href="main.css">
 
+	<!--We used Leaflet to create maps.
+		http://leafletjs.com/examples.html gives a good overview of how to implement basic 
+		map features using their API - all the code in here can be found in those tutorials -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
    integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
    crossorigin=""/>
@@ -19,8 +22,8 @@
 </head>
 <body>
 
+	<!--Header section-->
 	<header class="wrapper dark">
-
 		<div class="hourvoice">
 			<h2 id="company_name"><img src="logo.png"></h2>
 		</div>
@@ -34,7 +37,10 @@
 			</ul>
 		</nav>
 	</header>
+	<!--End header section-->
 
+
+	<!--Search bar + map section-->
 	<section class="search">
 		<section class="wrapper">
 
@@ -58,8 +64,10 @@
 			</script>
 		</section>
 	</section>
+	<!--End search bar and map section-->
 
-	<!--script for transitioning pages to company index-->
+
+	<!--script for transitioning pages to company index page-->
 	<script>
 		window.onload = function() {
 			var url = document.location.href,
@@ -79,12 +87,14 @@
 	</script>
 
 
+	<!--Companies section-->
 	<section class="companies">
 		<section class="wrapper">
 			<div class="title animated wow fadeIn">
 				<h2>Index of Companies</h2>
 			</div>
 
+			<!--Create table to be dynamically populated in script-->
 			<table id="myTable">
 			  <tr class="header">
 			    <th style="width:33%;" onclick="sortTable(0)" id="h">Employer</th>
@@ -95,11 +105,11 @@
 			  </tr>
 			</table>
 
+			<!--Script which dynamically inserts table rows with data being pulled-->
 			<script>
 				var business_info = []
 
-				//dynamically populates table above with data being pulled below
-
+				//Pulls data from City of Chciago Data portal
 				$.ajax({
 					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
 					type: "GET",
@@ -114,6 +124,7 @@
 						var row = table.insertRow(i+1);
 						var business_name = business.doing_business_as_name.toLowerCase();
 
+						//Inserting data into proper cells in each row
 						var cell = row.insertCell(0);
 						cell.id = business_name;
 						cell.innerHTML=business_name;
@@ -132,6 +143,7 @@
 
 					});
 
+					//If a company element is clicked on, it transitions the page to company_example/index.html
 					$("tr").click(function(event) {
 						var id = event.target.id;
 						var temp="";
@@ -151,7 +163,7 @@
 					});
 
 				});
-				/*need latitude, longitude data for each business, inserted below*/
+				/*Need latitude and longitude for each business in order to put a marker on the map; below, we use static data of Chicago coordinates but ideally the map would be populated using a loop to contain markers with the latitude and longitude of the businesses being pulled above */
 				var marker = L.marker([41.8781, -87.6298]).addTo(mymap); 
 				var circle = L.circle([41.8781, -87.6298], {
 				    color: 'red',
@@ -164,7 +176,7 @@
 			</script>
 
 
-
+			<!--Script enabling user to use search bar to search for a company in database-->
 			<script>
 				function searchFunction() {
 				  // Declare variables 
@@ -187,6 +199,7 @@
 				  }
 				}
 
+				/*Allows users to sort table rows by category they click on (i.e. Address, Company name, etc.)*/
 				function sortTable(n) {
 				  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
 				  table = document.getElementById("myTable");
@@ -244,8 +257,9 @@
 			</script>
 		</section>
 	</section>
+	<!--End companies section-->
 
-
+	<!--Footer-->
 	<footer>
 		<div class="wrapper">
 			<div class="rights">
@@ -261,5 +275,7 @@
 			</nav>
 		</div>		
 	</footer>
+	<!--End footer-->
+	
 </body>
 </html>
