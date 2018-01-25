@@ -100,6 +100,8 @@ header.dark nav ul li a:hover{
     font-size: 14px;
     color: #616161;
     padding-bottom: 30px;
+    padding-right: 40px;
+    padding-left: 40px;
 }
 
 .info p{
@@ -311,7 +313,7 @@ header.dark nav ul li a:hover{
 .reviews ul li p{
     color: #838181;
     font-family: "Helvetica";
-    font-size: 16px;
+    font-size: 12px;
     line-height: 28px;
     letter-spacing: .5px;
     padding-bottom: 30px;
@@ -371,6 +373,7 @@ footer .rights p{
     color: white;
     font-family: "Helvetica";
     font-size: 13px;
+    font-weight: bold;
     margin: 5px 0 0 40px; 
 }
 
@@ -399,6 +402,7 @@ footer nav ul li a{
     font-family: "Helvetica";
     font-size: 13px;
     text-decoration: none;
+    font-weight: bold;
 
     transition:all .2s linear;
     -webkit-transition:all .2s linear;
