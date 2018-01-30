@@ -5,10 +5,14 @@
 	<meta charset="utf-8">
 
 	
+	<!-- reset.css standardizes any incongruencies to make sure the element margins align properly. main.css provides the main css styling. animate.css provides the animations -->
 	<link rel="stylesheet" type="text/css" href="reset.css">
 	<link rel="stylesheet" type="text/css" href="main.css">
 	<link rel="stylesheet" type="text/css" href="animate.css">
 	
+	<!--As in the main page, we used Leaflet to create maps. 
+		http://leafletjs.com/examples.html gives a good overview of how to implement basic 
+		map features using their API - all the code in here can be found in those tutorials -->
 
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"
    integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
@@ -17,36 +21,52 @@
    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"
    integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
    crossorigin=""></script>
-   <script src="https://d3js.org/d3.v4.min.js"></script>
-   <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 
+   <!--We used d3.js to create data visualizations-->
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+
+   <!--Used jquery to dynamically change elements with data being pulled -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> 
 
 </head>
 <body>
 
+	<!--Header section-->
 	<header class="wrapper dark">
+
 		<div class="company">
 			<h2 id="company_name">Company Name</h2>
+			<!--JQuery used in script section on line 383 to insert actual companmy name here-->
 		</div>
+
+		<!--Navigation bar-->
 		<nav>
 			<ul>
+				<!--These are all empty links - insert with proper links-->
 				<li><a href="">About Us</a></li>
 				<li><a href="">Watchlist</a></li>
 				<li><a href="">Submit Insights</a></li>
 				<li><a href="">Contact Us</a></li>
 			</ul>
 		</nav>
+
 	</header>
+	<!--End header section-->
 
-
+	<!--Section with basic information about the company-->
 	<section class="basic wrapper">
 		<div class="title animated wow fadeIn">
 			<h2>About the Company</h2>
+			<!--filler text that should have short blurb about company or something-->
 			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempus dictum metus non bibendum. Maecenas molestie arcu quis felis viverra, a luctus velit elementum. Pellentesque vitae magna augue. Proin interdum mi id nibh luctus, a convallis nisi venenatis. Sed eget egestas ipsum, ac ornare massa. Nunc porta vel nisl ut tincidunt. Donec a viverra massa. Phasellus fermentum lectus mauris, vestibulum vehicula metus tristique vel. Suspendisse ut sapien ut nulla porta rutrum. Aenean pulvinar magna vitae blandit tempor. Ut ultrices nisi nec posuere suscipit. Donec ut sapien pellentesque, tincidunt purus non, sollicitudin turpis. Curabitur egestas sem a mi accumsan semper. Cras eu libero rhoncus, efficitur turpis ac, venenatis dolor. Fusce congue cursus consequat.</p>
 		</div>
 		<div class="info">
+			<!--This div is styled in CSS to specifically accomodate 4 elements per line
+				If you want to add another set of four elements, create a new <ul class="clearfix"></ul>
+				element within this section; otherwise, modify the CSS in ".info ul li" in main.css
+				adjust margins so that list elements are spaced evenly-->
 			<ul class="clearfix">
+				<!--data should be pulled in script below this to populate the 'hello' text--> 
 				<li class="animated wow fadeInDown">
 					<h4>Address</h4>
 					<p id="address">hello</p>
@@ -65,6 +85,7 @@
 				</li>
 			</ul>
 			<script>
+				//get data here to populate above info
 				$.ajax({
 					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
 					type: "GET",
@@ -73,7 +94,9 @@
 						"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
 					}
 				}).done(function(data) {
+					//changing address element in 'info' section
 					document.getElementById('address').innerHTML = data[0].address + ", " + data[0].city +", " + data[0].state + " " + data[0].zip_code;
+					//changing business license element in 'info' section
 					document.getElementById('license-id').innerHTML = data[0].license_id;
 					var account_num = data[0].account_number;
 					console.log(data);
@@ -85,8 +108,8 @@
 							"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
 						}
 					}).done(function(dd) {
+						//changing business owner element in 'info' section
 						document.getElementById('owner').innerHTML = dd[0].owner_first_name + " " + dd[0].owner_middle_initial + " " + dd[0].owner_last_name;
-						console.log(dd);
 					});
 
 				});
@@ -96,17 +119,20 @@
 	</section>
 
 
-	<section class="services wrapper">
+	<!--Company Visualizations Section-->
+	<section class="viz wrapper">
 		<h2>Company Data</h2>
 		<ul class="clearfix">
 			<li class="animated wow fadeInDown">
 				<div id="mapid"></div>
+				<!--This map is inserted in section named 'labor wrapper'-->
 				<span class="separator"></span>
 				<h2>Location</h2>
 			</li>
 			<li class="animated wow fadeInDown"  data-wow-delay=".2s">
 				<div id ="rating"></div>
 				<script>
+					//should use hourvoice user rating data below instead of static data
 					var data = [
 					  {name: "1", value: 40},
 					  {name: "2", value: 20},
@@ -114,8 +140,10 @@
 					  {name: "4", value: 10},
 					  {name: "5", value: 9}
 					];
+
 					var text = "";
 
+					/* Creating pie chart using D3 */
 					var width = 300;
 					var height = 300;
 					var thickness = 50;
@@ -125,65 +153,65 @@
 					var color = d3.scaleOrdinal(d3.schemeCategory20);
 
 					var svg = d3.select("#rating")
-					.append('svg')
-					.attr('class', 'pie')
-					.attr('width', width)
-					.attr('height', height);
+						.append('svg')
+						.attr('class', 'pie')
+						.attr('width', width)
+						.attr('height', height);
 
 					var g = svg.append('g')
-					.attr('transform', 'translate(' + (width/2) + ',' + (height/2) + ')');
+						.attr('transform', 'translate(' + (width/2) + ',' + (height/2) + ')');
 
 					var arc = d3.arc()
-					.innerRadius(radius - thickness)
-					.outerRadius(radius);
+						.innerRadius(radius - thickness)
+						.outerRadius(radius);
 
 					var pie = d3.pie()
-					.value(function(d) { return d.value; })
-					.sort(null);
+						.value(function(d) { return d.value; })
+						.sort(null);
 
 					var path = g.selectAll('path')
-					.data(pie(data))
-					.enter()
-					.append("g")
-					.on("mouseover", function(d) {
-					      let g = d3.select(this)
-					        .style("cursor", "pointer")
-					        .style("fill", "black")
-					        .append("g")
-					        .attr("class", "text-group");
-					 
-					      g.append("text")
-					        .attr("class", "name-text")
-					        .text(`${d.data.name}`)
-					        .attr('text-anchor', 'middle')
-					        .attr('dy', '-1.2em');
-					  
-					      g.append("text")
-					        .attr("class", "value-text")
-					        .text(`${d.data.value}`)
-					        .attr('text-anchor', 'middle')
-					        .attr('dy', '.6em');
-					    })
-					  .on("mouseout", function(d) {
-					      d3.select(this)
-					        .style("cursor", "none")  
-					        .style("fill", color(this._current))
-					        .select(".text-group").remove();
-					    })
-					  .append('path')
-					  .attr('d', arc)
-					  .attr('fill', (d,i) => color(i))
-					  .on("mouseover", function(d) {
-					      d3.select(this)     
-					        .style("cursor", "pointer")
-					        .style("fill", "white");
-					    })
-					  .on("mouseout", function(d) {
-					      d3.select(this)
-					        .style("cursor", "none")  
-					        .style("fill", color(this._current));
-					    })
-					  .each(function(d, i) { this._current = i; });
+						.data(pie(data))
+						.enter()
+						.append("g")
+						.on("mouseover", function(d) {
+						      let g = d3.select(this)
+						        .style("cursor", "pointer")
+						        .style("fill", "black")
+						        .append("g")
+						        .attr("class", "text-group");
+						 
+						      g.append("text")
+						        .attr("class", "name-text")
+						        .text(`${d.data.name}`)
+						        .attr('text-anchor', 'middle')
+						        .attr('dy', '-1.2em');
+						  
+						      g.append("text")
+						        .attr("class", "value-text")
+						        .text(`${d.data.value}`)
+						        .attr('text-anchor', 'middle')
+						        .attr('dy', '.6em');
+						    })
+						  .on("mouseout", function(d) {
+						      d3.select(this)
+						        .style("cursor", "none")  
+						        .style("fill", color(this._current))
+						        .select(".text-group").remove();
+						    })
+						  .append('path')
+						  .attr('d', arc)
+						  .attr('fill', (d,i) => color(i))
+						  .on("mouseover", function(d) {
+						      d3.select(this)     
+						        .style("cursor", "pointer")
+						        .style("fill", "white");
+						    })
+						  .on("mouseout", function(d) {
+						      d3.select(this)
+						        .style("cursor", "none")  
+						        .style("fill", color(this._current));
+						    })
+						  .each(function(d, i) { this._current = i; });
 
 
 					g.append('text')
@@ -194,11 +222,13 @@
 				<span class="separator"></span>
 				<h2>Rating</h2>
 			</li>
+
 			<li class="animated wow fadeInDown"  data-wow-delay=".4s">
 				<div id="wage">
 				</div>
 				<script>
-					// Define some sample data
+					/* Creating bar chart using D3 */
+					// This uses random generic static data; can use other data in place
 					var data = [
 					  { value: 14, label: 'Median' },
 					  { value: 12, label: 'Min. Wage' },
@@ -291,21 +321,22 @@
 					     .attr('x', function( d, i ) { return (dimensions.gInnerWidth / data.length) * i + dimensions.bMargin; })
 					     .attr('y', function( d, i ) { return dimensions.gInnerHeight - yScale( d.value );})
 
-					     
-      	
-
 				</script>
 				<span class="separator"></span>
 				<h2>Median Wage</h2>
 			</li>
 		</ul>
 	</section>
+	<!--End company visualization section-->
+
+	<!--Labor data visualizations section. This section is styled to look like it is still a continuation of the previous section; it is only set into a separate section so that its elements can be styled with different margins/paddings, as the previous is made specifically to accomodate having 3 visualizations on one line, and we wanted 2-->
 	<section class="labor wrapper">
 		<ul class="clearfix">
 
 			<li class="animated wow fadeInDown">
 				<div id="backwages"></div>
 				<script>
+
 					var companies = 'http://stopwagetheft.stanford.edu/api/v1/cases?&limit=1&columns=employees_owed_backwages,legal_name,latitude,longitude';
 					var latitude = 0;
 					var longitude = 0;
@@ -313,8 +344,11 @@
 					$.getJSON(companies, function(data) {
 						latitude = data["data"][0].latitude;
 						longitude=data["data"][0].longitude;
+
+						//using pulled data to modify backwages element
 						document.getElementById('backwages').innerHTML=data["data"][0].employees_owed_backwages;
 					}).done(function(data) {
+						//inserting map into "company visualizations" section
 						var mymap = L.map('mapid').setView([latitude, longitude], 13);
 
 						L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
@@ -324,6 +358,7 @@
 						    accessToken: 'pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA'
 						}).addTo(mymap);
 
+						//creating marker of company location on map
 						var circle = L.circle([latitude, longitude], {
 						    color: 'red',
 						    fillColor: '#f03',
@@ -332,13 +367,13 @@
 						}).addTo(mymap);
 					});
 
-				
 				</script>
 				<h2>Employees Owed Backwages</h2>
 			</li>
 			<li class="animated wow fadeInDown">
 				<div id="violations"></div>
 				<script>
+					//modifies element with number of violations, should pull from API instead of using static data
 					document.getElementById('violations').innerHTML = 5;
 				</script>
 				<h2>Violations Reported</h2>
@@ -348,6 +383,7 @@
 	</section>
 
 	<script>
+		/* Using Jquery to modify 'company name' element with actual company name */
 		window.onload = function() {
 			var url = document.location.href,
         	params = url.split('?')[1].split('=');
@@ -366,7 +402,8 @@
 	</script>
 
 
-	<section class="testimonials wrapper">
+	<!--Section for User Reviews-->
+	<section class="reviews wrapper">
 		<div class="title animated wow fadeIn">
 			<h2>User Reviews</h2>
 			<hr class="separator"/>
@@ -386,7 +423,7 @@
 				</p>
 			</li>
 		</ul>
-	</section><!--  End testimonials  -->
+	</section>
 
 
 	<footer>
@@ -403,6 +440,6 @@
 				</ul>
 			</nav>
 		</div>		
-	</footer><!--  End footer  -->
+	</footer>
 </body>
 </html>

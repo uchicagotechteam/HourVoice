@@ -100,6 +100,8 @@ header.dark nav ul li a:hover{
     font-size: 14px;
     color: #616161;
     padding-bottom: 30px;
+    padding-right: 40px;
+    padding-left: 40px;
 }
 
 .info p{
@@ -144,8 +146,8 @@ header.dark nav ul li a:hover{
   stroke: #62D2E7;
 }
 
-/*    Services    */
-.services {
+/*    viz    */
+.viz {
     background-color: teal;
     padding-top: 20px;
     padding-left: 40px;
@@ -153,7 +155,7 @@ header.dark nav ul li a:hover{
     padding-bottom: 40px;
 }
 
-.services h2{
+.viz h2{
     padding-top: 40px;
     padding-bottom: 40px;
     color: white;
@@ -166,11 +168,11 @@ header.dark nav ul li a:hover{
 
 }
 
-.services ul{
+.viz ul{
     margin-top: 20px;
 }
 
-.services ul li{
+.viz ul li{
     list-style: none;
     display: block;
     width: 313px;
@@ -180,14 +182,14 @@ header.dark nav ul li a:hover{
 }
 
 
-.services ul li .separator{
+.viz ul li .separator{
     width: 1px;
     display: block;
     height: 5px;
     margin: 5px auto;
 }
 
-.services ul li h2{
+.viz ul li h2{
     color: white;
     font-family: "Helvetica";
     font-size: 18px;
@@ -195,7 +197,7 @@ header.dark nav ul li a:hover{
     margin: 0;
 }
 
-.services ul li p{
+.viz ul li p{
    color: white;
     font-family: "Helvetica";
     font-size: 14px;
@@ -282,20 +284,21 @@ header.dark nav ul li a:hover{
     color: white;
     font-size: 50px;
 }
-/*    testimonials    */
-.testimonials{
+/*    reviews    */
+.reviews{
     padding-top: 100px;
     padding-left: 40px;
     padding-right: 40px;
+    padding-bottom: 40px;
     background-color: #B0C4DE;
 }
 
-.testimonials ul{
+.reviews ul{
     margin-top: 70px;
     list-style: none;
 }
 
-.testimonials ul li{
+.reviews ul li{
     display: block;
     float: left;
     margin-left: 70px;
@@ -303,14 +306,14 @@ header.dark nav ul li a:hover{
 }
 
 
-.testimonials ul li .quotes{
+.reviews ul li .quotes{
     margin-right: 10px;
 }
 
-.testimonials ul li p{
+.reviews ul li p{
     color: #838181;
     font-family: "Helvetica";
-    font-size: 16px;
+    font-size: 12px;
     line-height: 28px;
     letter-spacing: .5px;
     padding-bottom: 30px;
@@ -320,11 +323,11 @@ header.dark nav ul li a:hover{
 }
 
 
-.testimonials ul li .client{
+.reviews ul li .client{
     margin-left: 20px;
 }
 
-.testimonials ul li .client img.avatar{
+.reviews ul li .client img.avatar{
     float: left;
     margin-right: 20px;
     -webkit-border-radius: 100px;
@@ -333,11 +336,11 @@ header.dark nav ul li a:hover{
     border-radius: 100px;
 }
 
-.testimonials ul li .client .client_details{
+.reviews ul li .client .client_details{
     float: left;
 }
 
-.testimonials ul li .client .client_details h4{
+.reviews ul li .client .client_details h4{
     color: #7b7979;
     font-family: "Helvetica";
     font-size: 14px;
@@ -345,7 +348,7 @@ header.dark nav ul li a:hover{
     margin: 0 0 10px 0;
 }
 
-.testimonials ul li .client .client_details h5{
+.reviews ul li .client .client_details h5{
     color: #7b7979;
     font-family: "Helvetica";
     font-size: 12px;
@@ -354,87 +357,11 @@ header.dark nav ul li a:hover{
 }
 
 
-
-
-
-
-
-/*    blog posts    */
-.blog_posts{
-    margin-top: 100px;
-    padding: 100px 0;
-    background: #fafafa;
-}
-
-.blog_posts ul{
-    list-style: none;
-    margin-top: 70px;
-}
-
-.blog_posts ul li{
-    display: block;
-    width: 230px;
-    margin-left: 60px;
-    float: left;
-}
-
-.blog_posts ul li:first-child{
-    margin-left: 0;
-}
-
-.blog_posts ul li .media .date{
-    position: absolute;
-    top: 0;
-    left: 30px;
-    width: 40px;
-    padding: 10px 0;
-    background: rgba(62, 62, 62, .7);
-    text-align: center;
-}
-
-.blog_posts ul li .media .date span{
-    display: block;
-}
-
-.blog_posts ul li .media .date .day{
-    color: #fff;
-    font-family: "raleway-bold";
-    font-size: 18px;
-    font-weight: bold;
-
-}
-
-.blog_posts ul li .media .date .month{
-    color: #fff;
-    font-family: "raleway-regular";
-    font-size: 12px;
-}
-
-.blog_posts ul li .media{
-    width: 230px;
-    height: 230px;
-    position: relative;
-}
-
-.blog_posts ul li h1{
-    color: #616161;
-    font-family: "raleway-regular";
-    font-size: 16px;
-    font-weight: normal;
-    line-height: 26px;
-    margin: 20px 0 0 0;
-}
-
-
-
-
-
-
-
 /*    footer    */
 footer{
     padding: 35px 0;
     overflow: hidden;
+    background-color: slategrey;
 }
 
 footer .footer_logo{
@@ -443,9 +370,10 @@ footer .footer_logo{
 
 footer .rights p{
     float: left;
-    color: #838181;
+    color: white;
     font-family: "Helvetica";
     font-size: 13px;
+    font-weight: bold;
     margin: 5px 0 0 40px; 
 }
 
@@ -470,10 +398,11 @@ footer nav ul li{
 }
 
 footer nav ul li a{
-    color: #838181;
+    color: white;
     font-family: "Helvetica";
     font-size: 13px;
     text-decoration: none;
+    font-weight: bold;
 
     transition:all .2s linear;
     -webkit-transition:all .2s linear;
