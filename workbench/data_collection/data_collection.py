@@ -133,21 +133,11 @@ for case1 in business_json:
     combined_databases[case1] = business_json[case1]
     for case2 in sub_combined_databases:
         align_score = 0
-        latitudes_match = False
-        longitudes_match = True
         if 'food_inspection' in sub_combined_databases[case2]:
             align_score = align_strings(business_json[case1]['doing_business_as_name'], sub_combined_databases[case2]['food_inspection']['dba_name'])[0]
-            if 'latitude' in sub_combined_databases[case2]['food_inspection'] and 'latitude' in business_json[case1]:
-                latitudes_match = round(sub_combined_databases[case2]["food_inspection"]["latitude"], 6) == round(business_json[case1]["latitude"], 6)
-            if 'longitude' in sub_combined_databases[case2]['food_inspection'] and 'longitude' in business_json[case1]:
-                longitudes_match = round(sub_combined_databases[case2]["food_inspection"]["longitude"], 6) == round(business_json[case1]["longitude"], 6)
         if 'OSHA' in sub_combined_databases[case2]:
             align_score = align_strings(business_json[case1]['doing_business_as_name'], sub_combined_databases[case2]['OSHA']['Employer'])[0]
-            if 'Latitude' in sub_combined_databases[case2]['OSHA'] and 'latitude' in business_json[case1]:
-                latitudes_match = sub_combined_databases[case2]["OSHA"]["Latitude"] == round(business_json[case1]["latitude"], 2)
-            if 'Longitude' in sub_combined_databases[case2]['OSHA'] and 'longitude' in business_json[case1]:
-                longitudes_match = sub_combined_databases[case2]["OSHA"]["Longitude"] == round(business_json[case1]["longitude"], 2)
-        if align_score > score_thresh and (latitudes_match and longitudes_match):
+        if align_score > score_thresh:
             combined_databases[case1]["violations"] = sub_combined_databases[case2]
 
 output_file = open("output.txt", 'w')
