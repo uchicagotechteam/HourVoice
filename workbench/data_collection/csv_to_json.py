@@ -21,4 +21,4 @@ def convert_csv_to_json(csv_file, json_file, primary_key):
     return
 
 if __name__ == '__main__':
-    convert_csv_to_json('output.txt', 'output.json', primary_key='ID')
+    convert_csv_to_json('severeinjury.csv', 'severeinjury.json', primary_key='ID')

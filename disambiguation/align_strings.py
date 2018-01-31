@@ -6,7 +6,8 @@ from global_alignment import align_strings_globally
 
 def get_stop_words():
     stop_words = []
-    with open(os.path.abspath('../../disambiguation/company_name_stop_words.txt'), 'r') as f:
+    # with open(os.path.abspath('../../disambiguation/company_name_stop_words.txt'), 'r') as f:
+    with open(os.path.abspath('company_name_stop_words.txt'), 'r') as f:
         stop_words = f.read().split()
     return stop_words
 
