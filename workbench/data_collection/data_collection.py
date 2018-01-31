@@ -91,13 +91,13 @@ def compare_lats_lons_and_dbaname(case1, case2, lat_header, lon_header, c1_name,
 
 # used in consolidate_data_by_dbaname to add a new case to the final database
 def create_new_entry(database, hv_id, case, repeated_headers, unique_headers):
-    database[hv_id] = {"hourvoice_id": c1_hv_id}
+    database[hv_id] = {"hourvoice_id": hv_id}
     for repeat_header in repeated_headers:
-        if repeat_header in case1:
-            database[hv_id].update({repeat_header: case1[repeat_header]})
+        if repeat_header in case:
+            database[hv_id].update({repeat_header: case[repeat_header]})
     for unique_header in unique_headers:
-        if unique_header in case1:
-            database[hv_id].update({unique_header: [case1[unique_header]]})
+        if unique_header in case:
+            database[hv_id].update({unique_header: [case[unique_header]]})
         else:
             database[hv_id][unique_header] = []
 
