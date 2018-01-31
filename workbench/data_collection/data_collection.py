@@ -8,10 +8,21 @@ from sodapy import Socrata
 
 
 score_thresh = 0.75 # for name comparisons/alignments
-unique_food_headers = ['hourvoice_id','results, inspection_id', 'license_', 'violations', 'risk', 'inspection_type', 'inspection_date']
-repeated_food_headers = [':@computed_region_bdys_3d7i', ':@computed_region_43wa_7qmu', ':@computed_region_6mkv_f3dw', ':@computed_region_awaf_s7ux', ':@computed_region_vrxf_vc4k', 'dba_name', 'city', 'zip', 'facility_type', 'state', 'location', 'latitude', 'aka_name', 'address', 'longitude']
-unique_osha_headers = ['hourvoice_id','Part of Body', 'Source', 'Final Narrative', 'Nature', 'Hospitalized', 'Primary NAICS', 'Amputation', 'Secondary Source', 'Part of Body Title', 'Secondary Source Title', 'Inspection', 'ID', 'EventTitle', 'SourceTitle', 'EventDate', 'NatureTitle', 'Event', 'UPA']
-repeated_osha_headers = ['City', 'Zip', 'Employer', 'State', 'Latitude', 'Longitude', 'Address1', 'Address2']
+unique_food_headers = ['hourvoice_id','results, inspection_id', 'license_',
+                       'violations', 'risk', 'inspection_type', 'inspection_date']
+repeated_food_headers = [':@computed_region_bdys_3d7i', ':@computed_region_43wa_7qmu',
+                         ':@computed_region_6mkv_f3dw', ':@computed_region_awaf_s7ux',
+                         ':@computed_region_vrxf_vc4k', 'dba_name', 'city', 'zip',
+                         'facility_type', 'state', 'location', 'latitude', 'aka_name',
+                         'address', 'longitude']
+unique_osha_headers = ['hourvoice_id','Part of Body', 'Source', 'Final Narrative',
+                       'Nature', 'Hospitalized', 'Primary NAICS', 'Amputation',
+                       'Secondary Source', 'Part of Body Title',
+                       'Secondary Source Title', 'Inspection', 'ID',
+                       'EventTitle', 'SourceTitle', 'EventDate', 'NatureTitle',
+                       'Event', 'UPA']
+repeated_osha_headers = ['City', 'Zip', 'Employer', 'State', 'Latitude',
+                         'Longitude', 'Address1', 'Address2']
 unique_business_headers = ['id', 'license_id', 'site_number', 'license_code', 'license_description', 'business_activity_id', 'business_activity', 'license_number', 'application_type', 'application_created_date', 'application_requirements_complete', 'payment_date', 'conditional_approval', 'license_term_start_date', 'license_term_expiration_date', 'license_approved_for_issuance', 'date_issued', 'license_status', 'license_status_change_date']
 repeated_business_headers = ['account_number', 'legal_name', 'doing_business_as_name', 'address', 'city', 'state', 'zip_code', 'ward', 'precinct', 'ward precinct', 'police_district', 'ssa', 'latitude', 'longitude', 'location']
 
@@ -96,18 +107,23 @@ def combine_data_by_dbaname(unique_headers, repeated_headers, dba_header, lat_he
 def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_name, db2_dbaheader, db2_unique_header):
     frequency_data = {}
     visited = set()
+    is_business = False
+    if(db1_name == "business_license" or db2_name == "business_license"):
+        is_business = True
     for case1 in db1:
         if case1 in visited:    # already been added
             continue
         frequency_data[case1] = {}
         frequency_data[case1][db1_name] = db1[case1]
-        frequency_data[case1]["Frequency"] = len(frequency_data[case1][db1_name][db1_unique_header])
+        if not is_business:
+            frequency_data[case1]["Frequency"] = len(frequency_data[case1][db1_name][db1_unique_header])
         for case2 in db2:
             if case2 in visited:    # already been added
                 continue
             align_score = align_strings(db1[case1][db1_dbaheader], db2[case2][db2_dbaheader])[0]
             if align_score > score_thresh:
-                frequency_data[case1]["Frequency"] += len(db2[case2][db2_unique_header])
+                if not is_business:
+                    frequency_data[case1]["Frequency"] += len(db2[case2][db2_unique_header])
                 frequency_data[case1][db2_name] = db2[case2]
                 visited.add(case2)
                 if case2 in frequency_data:
@@ -115,7 +131,8 @@ def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_na
             elif case2 not in visited:
                 frequency_data[case2] = {}
                 frequency_data[case2][db2_name] = db2[case2]
-                frequency_data[case2]["Frequency"] = len(frequency_data[case2][db2_name][db2_unique_header])
+                if not is_business:
+                    frequency_data[case2]["Frequency"] = len(frequency_data[case2][db2_name][db2_unique_header])
         visited.add(case1)
     return frequency_data
 
@@ -138,7 +155,9 @@ for case1 in business_json:
         if 'OSHA' in sub_combined_databases[case2]:
             align_score = align_strings(business_json[case1]['doing_business_as_name'], sub_combined_databases[case2]['OSHA']['Employer'])[0]
         if align_score > score_thresh:
-            combined_databases[case1]["violations"] = sub_combined_databases[case2]
+            combined_databases[case1].update(sub_combined_databases[case2])
+        else:
+            combined_databases[case2] = sub_combined_databases[case2]
 
-output_file = open("output.txt", 'w')
+output_file = open("combined_data.json", 'w')
 output_file.write(json.dumps(combined_databases))
