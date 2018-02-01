@@ -50,8 +50,7 @@
 
 			<div id="mapid"></div>
 			<script>
-				//view currently set to chicago's latitude + longitude
-
+				//view currently set to chicago's latitude + longitude, can change below
 				var mymap = L.map('mapid').setView([41.8781, -87.6298], 13);
 
 				L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
@@ -107,7 +106,39 @@
 
 			<!--Script which dynamically inserts table rows with data being pulled-->
 			<script>
-				var business_info = []
+				var all_data = []
+
+				$.ajax({
+					url: "http://35.194.27.33/api/combined_data_glimpse.json",
+					type: "GET"
+				}).done(function(data) {
+					all_data = data;
+					var table=document.getElementById("myTable");
+					$.each(all_data, function(i, company){
+						var row = table.insertRow(i+1);
+						var company_name = company["name"].toLowerCase() + "_" + company["hourvoice_id"];
+
+						//Inserting data into proper cells in each row
+						var cell = row.insertCell(0);
+						cell.id = company_name;
+						cell.innerHTML=company_name;
+						cell = row.insertCell(1);
+						cell.id = company_name;
+						cell.innerHTML=company["address"].toLowerCase();
+						cell = row.insertCell(2);
+						cell.id = company_name;
+						cell.innerHTML=company["city"].toLowerCase();
+						cell = row.insertCell(3);
+						cell.id = company_name;
+						cell.innerHTML=Math.floor(Math.random() * 50);
+						cell = row.insertCell(4);
+						cell.id = company_name;
+						cell.innerHTML=Math.floor(Math.random() * 100);
+				});
+
+
+
+				/*var business_info = []
 
 				//Pulls data from City of Chciago Data portal
 				$.ajax({
@@ -141,23 +172,32 @@
 						cell.id = business_name;
 						cell.innerHTML=Math.floor(Math.random() * 100);
 
-					});
+					});*/
 
 					//If a company element is clicked on, it transitions the page to company_example/index.html
 					$("tr").click(function(event) {
 						var id = event.target.id;
-						var temp="";
+						var temp_name="";
+						var temp_id="";
 						if (id != "h") {
 							for (i=0; i<id.length; i++) {
 								if (id[i] != ' ') {
-									temp+=id[i];
+									temp_name+=id[i];
+								} else if (id[i] == '_') {
+									break;
 								} else {
-									temp+='_'
-								}
+									temp_name+='_'
+								} 
 							}
+
+							i++;
+							for (j=i; j<id.length; j++) {
+								temp_id += id[j];
+							}
+
 							console.log(temp);
 
-							url = '../company_index.html?name=' + temp;
+							url = '../company_index.html?name=' + temp_name + '?id=' + temp_id;
 							document.location.href = url;
 						}
 					});
@@ -276,6 +316,6 @@
 		</div>		
 	</footer>
 	<!--End footer-->
-	
+
 </body>
 </html>
