@@ -141,7 +141,7 @@ def consolidate_data_by_hv_id(unique_headers, repeated_headers, dba_header, lat_
     return consolidated_data
 
 # counts the number of violations that has been recorded of each business, and notes
-# crossover between
+# crossover between databases
 def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_name, db2_dbaheader, db2_unique_header):
     frequency_data = {}
     visited = set()
@@ -171,7 +171,6 @@ def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_na
 
 food_json = consolidate_data_by_hv_id(unique_food_headers, repeated_food_headers, 'dba_name', 'latitude', 'longitude', food_inspection_data)
 osha_json = consolidate_data_by_hv_id(unique_osha_headers, repeated_osha_headers, 'Employer', 'Latitude', 'Longitude', osha_injury_data)
-
 business_json = consolidate_data_by_hv_id(unique_business_headers, repeated_business_headers, 'doing_business_as_name', 'latitude', 'longitude', business_license_data)
 sub_combined_databases = count_frequency(food_json, "food_inspection", 'dba_name', 'inspection_date', osha_json, "OSHA", 'Employer', 'ID')
 
