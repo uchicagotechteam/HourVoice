@@ -63,8 +63,7 @@
 		<div class="info">
 			<!--This div is styled in CSS to specifically accomodate 4 elements per line
 				If you want to add another set of four elements, create a new <ul class="clearfix"></ul>
-				element within this section; otherwise, modify the CSS in ".info ul li" in main.css
-				adjust margins so that list elements are spaced evenly-->
+				element within this section. If deleting elements, modify the CSS in ".info ul li" in main.css to adjust margins so that list elements are spaced evenly-->
 			<ul class="clearfix">
 				<!--data should be pulled in script below this to populate the 'hello' text--> 
 				<li class="animated wow fadeInDown">
@@ -85,6 +84,7 @@
 				</li>
 			</ul>
 			<script>
+
 				//get data here to populate above info
 				$.ajax({
 					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
@@ -92,20 +92,23 @@
 					data: {
 						"$limit": 1,
 						"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
+						//personal token, have to make personal account with city of chicago data portal
 					}
 				}).done(function(data) {
 					//changing address element in 'info' section
 					document.getElementById('address').innerHTML = data[0].address + ", " + data[0].city +", " + data[0].state + " " + data[0].zip_code;
 					//changing business license element in 'info' section
 					document.getElementById('license-id').innerHTML = data[0].license_id;
+
+					//grabbing account number to find name of owner through chicago data portal
 					var account_num = data[0].account_number;
-					console.log(data);
 
 					$.ajax({
 						url: "https://data.cityofchicago.org/resource/cwcw-dfrk.json?account_number=" + account_num,
 						type: "GET",
 						data: {
 							"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
+							//personal token
 						}
 					}).done(function(dd) {
 						//changing business owner element in 'info' section
@@ -125,7 +128,7 @@
 		<ul class="clearfix">
 			<li class="animated wow fadeInDown">
 				<div id="mapid"></div>
-				<!--This map is inserted in section named 'labor wrapper'-->
+				<!--This div's map is inserted in section named 'labor wrapper'-->
 				<span class="separator"></span>
 				<h2>Location</h2>
 			</li>
@@ -329,7 +332,7 @@
 	</section>
 	<!--End company visualization section-->
 
-	<!--Labor data visualizations section. This section is styled to look like it is still a continuation of the previous section; it is only set into a separate section so that its elements can be styled with different margins/paddings, as the previous is made specifically to accomodate having 3 visualizations on one line, and we wanted 2-->
+	<!--Labor data visualizations section. This section is styled to look like it is still a continuation of the previous section; it is only set into a separate section so that its elements can be styled with different margins/paddings, as the previous is made specifically to accomodate having 3 visualizations on one line, and this section only accomodates 2 per line-->
 	<section class="labor wrapper">
 		<ul class="clearfix">
 
@@ -386,14 +389,16 @@
 		/* Using Jquery to modify 'company name' element with actual company name */
 		window.onload = function() {
 			var url = document.location.href,
-        	params = url.split('?')[1].split('=');
-        	url = params[1];
+        	params = url.split('?=');
+        	temp_name = params[1];
+        	temp_id = params[2];
+
         	var name = "";
-        	for (i=0; i<url.length; i++) {
-        		if (url[i] == '_') {
+        	for (i=0; i<temp_name.length; i++) {
+        		if (temp_name[i] == '_') {
         			name += " ";
         		} else {
-        			name += url[i];
+        			name += temp_name[i];
         		}
         	}
         	document.getElementById('company_name').innerHTML = name;
@@ -424,6 +429,7 @@
 			</li>
 		</ul>
 	</section>
+	<!--End section for user reviews-->
 
 
 	<footer>
