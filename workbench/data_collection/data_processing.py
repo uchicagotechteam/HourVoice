@@ -91,13 +91,13 @@ def compare_lats_lons_and_dbaname(case1, case2, lat_header, lon_header, c1_name,
 
 # used in consolidate_data_by_dbaname to add a new case to the final database
 def create_new_entry(database, hv_id, case, repeated_headers, unique_headers):
-    database[hv_id] = {"hourvoice_id": c1_hv_id}
+    database[hv_id] = {"hourvoice_id": hv_id}
     for repeat_header in repeated_headers:
-        if repeat_header in case1:
-            database[hv_id].update({repeat_header: case1[repeat_header]})
+        if repeat_header in case:
+            database[hv_id].update({repeat_header: case[repeat_header]})
     for unique_header in unique_headers:
-        if unique_header in case1:
-            database[hv_id].update({unique_header: [case1[unique_header]]})
+        if unique_header in case:
+            database[hv_id].update({unique_header: [case[unique_header]]})
         else:
             database[hv_id][unique_header] = []
 
@@ -141,7 +141,7 @@ def consolidate_data_by_hv_id(unique_headers, repeated_headers, dba_header, lat_
     return consolidated_data
 
 # counts the number of violations that has been recorded of each business, and notes
-# crossover between
+# crossover between databases
 def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_name, db2_dbaheader, db2_unique_header):
     frequency_data = {}
     visited = set()
@@ -171,7 +171,6 @@ def count_frequency(db1, db1_name, db1_dbaheader, db1_unique_header, db2, db2_na
 
 food_json = consolidate_data_by_hv_id(unique_food_headers, repeated_food_headers, 'dba_name', 'latitude', 'longitude', food_inspection_data)
 osha_json = consolidate_data_by_hv_id(unique_osha_headers, repeated_osha_headers, 'Employer', 'Latitude', 'Longitude', osha_injury_data)
-
 business_json = consolidate_data_by_hv_id(unique_business_headers, repeated_business_headers, 'doing_business_as_name', 'latitude', 'longitude', business_license_data)
 sub_combined_databases = count_frequency(food_json, "food_inspection", 'dba_name', 'inspection_date', osha_json, "OSHA", 'Employer', 'ID')
 
