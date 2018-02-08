@@ -36,7 +36,7 @@
 
 		<div class="company">
 			<h2 id="company_name">Company Name</h2>
-			<!--JQuery used in script section on line 383 to insert actual companmy name here-->
+			<!--JQuery used in script section on line 383 to insert actual company name here-->
 		</div>
 
 		<!--Navigation bar-->
@@ -83,41 +83,6 @@
 					<p id="owner">hello</p>
 				</li>
 			</ul>
-			<script>
-
-				//get data here to populate above info
-				$.ajax({
-					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
-					type: "GET",
-					data: {
-						"$limit": 1,
-						"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
-						//personal token, have to make personal account with city of chicago data portal
-					}
-				}).done(function(data) {
-					//changing address element in 'info' section
-					document.getElementById('address').innerHTML = data[0].address + ", " + data[0].city +", " + data[0].state + " " + data[0].zip_code;
-					//changing business license element in 'info' section
-					document.getElementById('license-id').innerHTML = data[0].license_id;
-
-					//grabbing account number to find name of owner through chicago data portal
-					var account_num = data[0].account_number;
-
-					$.ajax({
-						url: "https://data.cityofchicago.org/resource/cwcw-dfrk.json?account_number=" + account_num,
-						type: "GET",
-						data: {
-							"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
-							//personal token
-						}
-					}).done(function(dd) {
-						//changing business owner element in 'info' section
-						document.getElementById('owner').innerHTML = dd[0].owner_first_name + " " + dd[0].owner_middle_initial + " " + dd[0].owner_last_name;
-					});
-
-				});
-
-			</script>
 		</div>
 	</section>
 
@@ -339,7 +304,7 @@
 			<li class="animated wow fadeInDown">
 				<div id="backwages"></div>
 				<script>
-
+/*
 					var companies = 'http://stopwagetheft.stanford.edu/api/v1/cases?&limit=1&columns=employees_owed_backwages,legal_name,latitude,longitude';
 					var latitude = 0;
 					var longitude = 0;
@@ -369,7 +334,7 @@
 						    radius: 200
 						}).addTo(mymap);
 					});
-
+*/
 				</script>
 				<h2>Employees Owed Backwages</h2>
 			</li>
@@ -377,7 +342,60 @@
 				<div id="violations"></div>
 				<script>
 					//modifies element with number of violations, should pull from API instead of using static data
-					document.getElementById('violations').innerHTML = 5;
+/*					document.getElementById('violations').innerHTML = 5;*/
+
+/* Using Jquery to modify 'company name' element with actual company name */
+					window.onload = function() {
+						var url = document.location.href,
+			        	params = url.split('=');
+			        	temp_name = params[1];
+			        	temp_id = params[2];
+
+			        	var name = "";
+			        	for (i=0; i<temp_name.length; i++) {
+			        		if (temp_name[i] == '_') {
+			        			name += " ";
+			        		} else if (temp_name[i] == '?') {
+			        			break;
+			        		} else {
+			        			name += temp_name[i];
+			        		}
+			        	}
+
+			        	document.getElementById('company_name').innerHTML = name;
+
+			        	$.ajax({
+							url: "http://35.194.27.33/api/" + temp_id,
+							type: "GET"
+						}).done(function(data) {
+							var food = data['food_inspection'];
+							document.getElementById('address').innerHTML = food.address + ", " + food.city + ", " + food.state + " " + food.zip;
+							document.getElementById('license-id').innerHTML = food.license_;
+							document.getElementById('violations').innerHTML = food.violations.length;
+							document.getElementById('industry').innerHTML = food.facility_type;
+							var lat = Number(food.latitude);
+							var long = Number(food.longitude);
+
+							console.log(data);
+
+							var mymap = L.map('mapid').setView([lat, long], 13);
+
+							L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA', {
+							    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+							    maxZoom: 18,
+							    id: 'mapbox.streets',
+							    accessToken: 'pk.eyJ1IjoiYXJueXplbmciLCJhIjoiY2phMDExaDByMzA1MzJwcG85ZWtoMHBwbCJ9.-PFtNi2OogmhDDJyveEXbA'
+							}).addTo(mymap);
+
+							//creating marker of company location on map
+							var circle = L.circle([lat, long], {
+							    color: 'red',
+							    fillColor: '#f03',
+							    fillOpacity: 0.5,
+							    radius: 200
+							}).addTo(mymap);
+						});
+					};
 				</script>
 				<h2>Violations Reported</h2>
 			</li>
@@ -386,24 +404,7 @@
 	</section>
 
 	<script>
-		/* Using Jquery to modify 'company name' element with actual company name */
-		window.onload = function() {
-			var url = document.location.href,
-        	params = url.split('?=');
-        	temp_name = params[1];
-        	temp_id = params[2];
-
-        	var name = "";
-        	for (i=0; i<temp_name.length; i++) {
-        		if (temp_name[i] == '_') {
-        			name += " ";
-        		} else {
-        			name += temp_name[i];
-        		}
-        	}
-        	document.getElementById('company_name').innerHTML = name;
-        	console.log(name)
-		}
+		
 	</script>
 
 

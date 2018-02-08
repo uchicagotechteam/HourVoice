@@ -81,7 +81,10 @@ header.dark nav ul li a:hover{
     color: #919191;
 }
 
-#mapid { height: 300px; }
+#mapid { 
+	height: 300px;
+	width: 300px; 
+}
 
 .basic{
     background-color: #B0C4DE;
