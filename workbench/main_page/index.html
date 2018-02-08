@@ -66,27 +66,6 @@
 	<!--End search bar and map section-->
 
 
-	<!--script for transitioning pages to company index page-->
-	<script>
-		/*
-		window.onload = function() {
-			var url = document.location.href,
-        	params = url.split('?')[1].split('=');
-        	url = params[1];
-        	var name = "";
-        	for (i=0; i<url.length; i++) {
-        		if (url[i] == '_') {
-        			name += " ";
-        		} else {
-        			name += url[i];
-        		}
-        	}
-        	document.getElementById('company_name').innerHTML = name;
-        	console.log(name)
-		}*/
-	</script>
-
-
 	<!--Companies section-->
 	<section class="companies">
 		<section class="wrapper">
@@ -136,6 +115,8 @@
 						cell = row.insertCell(4);
 						cell.id = company_name;
 						cell.innerHTML=Math.floor(Math.random() * 100);
+					}).done(function() {
+						console.log("woohoo");
 					});
 				});
 
