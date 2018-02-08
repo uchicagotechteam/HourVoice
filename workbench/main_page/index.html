@@ -68,6 +68,7 @@
 
 	<!--script for transitioning pages to company index page-->
 	<script>
+		/*
 		window.onload = function() {
 			var url = document.location.href,
         	params = url.split('?')[1].split('=');
@@ -82,7 +83,7 @@
         	}
         	document.getElementById('company_name').innerHTML = name;
         	console.log(name)
-		}
+		}*/
 	</script>
 
 
@@ -108,20 +109,21 @@
 			<script>
 				var all_data = []
 
-				$.ajax({
-					url: "http://35.194.27.33/api/combined_data_glimpse.json",
-					type: "GET"
-				}).done(function(data) {
+				$.getJSON("http://35.194.27.33/combined_data_glimpse.json", function(data) {
 					all_data = data;
+					console.log(all_data);
 					var table=document.getElementById("myTable");
 					$.each(all_data, function(i, company){
 						var row = table.insertRow(i+1);
-						var company_name = company["name"].toLowerCase() + "_" + company["hourvoice_id"];
-
+						var c_name = (company["business_name"] || company["name"] || "").toLowerCase();
+						var company_name = c_name + "_" + company["hourvoice_id"];
+						
 						//Inserting data into proper cells in each row
+
+						row.id = company_name;						
 						var cell = row.insertCell(0);
 						cell.id = company_name;
-						cell.innerHTML=company_name;
+						cell.innerHTML=c_name;
 						cell = row.insertCell(1);
 						cell.id = company_name;
 						cell.innerHTML=company["address"].toLowerCase();
@@ -134,46 +136,43 @@
 						cell = row.insertCell(4);
 						cell.id = company_name;
 						cell.innerHTML=Math.floor(Math.random() * 100);
+					});
 				});
 
+				$("myTable").click(function() {
+					var id = $(this).attr('id');
+					console.log('clicking');
+					console.log(id);
+				});
 
+					
+						/*$("tr").click(function(event) {
+						var id = event.target.id;
+						console.log("clicking!");
+						var temp_name="";
+						var temp_id="";
+						if (id != "h") {
+							for (i=0; i<id.length; i++) {
+								if (id[i] != ' ') {
+									temp_name+=id[i];
+								} else if (id[i] == '_') {
+									break;
+								} else {
+									temp_name+='_'
+								} 
+							}
 
-				/*var business_info = []
+							i++;
+							for (j=i; j<id.length; j++) {
+								temp_id += id[j];
+							}
 
-				//Pulls data from City of Chciago Data portal
-				$.ajax({
-					url: "https://data.cityofchicago.org/resource/xqx5-8hwx.json",
-					type: "GET",
-					data: {
-						"$limit": 10,
-						"$$app_token": "9HlT94OOuLOGZeRGk9okbPYA2"
-					}
-				}).done(function(data) {
-					business_info = data;
-					var table=document.getElementById("myTable");
-					$.each(business_info, function(i, business){
-						var row = table.insertRow(i+1);
-						var business_name = business.doing_business_as_name.toLowerCase();
-
-						//Inserting data into proper cells in each row
-						var cell = row.insertCell(0);
-						cell.id = business_name;
-						cell.innerHTML=business_name;
-						cell = row.insertCell(1);
-						cell.id = business_name;
-						cell.innerHTML=business.address.toLowerCase();
-						cell = row.insertCell(2);
-						cell.id = business_name;
-						cell.innerHTML=business.city.toLowerCase();
-						cell = row.insertCell(3);
-						cell.id = business_name;
-						cell.innerHTML=Math.floor(Math.random() * 50);
-						cell = row.insertCell(4);
-						cell.id = business_name;
-						cell.innerHTML=Math.floor(Math.random() * 100);
-
+							url = '../company_index.html?name=' + temp_name + '?id=' + temp_id;
+							document.location.href = url;
+						}
 					});*/
-
+					
+/*
 					//If a company element is clicked on, it transitions the page to company_example/index.html
 					$("tr").click(function(event) {
 						var id = event.target.id;
@@ -195,14 +194,11 @@
 								temp_id += id[j];
 							}
 
-							console.log(temp);
-
 							url = '../company_index.html?name=' + temp_name + '?id=' + temp_id;
 							document.location.href = url;
 						}
-					});
+					});*/
 
-				});
 				/*Need latitude and longitude for each business in order to put a marker on the map; below, we use static data of Chicago coordinates but ideally the map would be populated using a loop to contain markers with the latitude and longitude of the businesses being pulled above */
 				var marker = L.marker([41.8781, -87.6298]).addTo(mymap); 
 				var circle = L.circle([41.8781, -87.6298], {
