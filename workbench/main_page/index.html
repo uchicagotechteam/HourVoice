@@ -90,16 +90,21 @@
 
 				$.getJSON("http://35.194.27.33/combined_data_glimpse.json", function(data) {
 					all_data = data;
-					console.log(all_data);
 					var table=document.getElementById("myTable");
 					$.each(all_data, function(i, company){
 						var row = table.insertRow(i+1);
 						var c_name = (company["business_name"] || company["name"] || "").toLowerCase();
-						var company_name = c_name + "_" + company["hourvoice_id"];
+						var c_id = company["hourvoice_id"];
+						var company_name = c_name + "_" + c_id;
+						row.onclick = function() {
+							url = '../company_index.html?name=' + c_name + '?id=' + c_id;
+							document.location.href = url;
+						}
 						
 						//Inserting data into proper cells in each row
 
-						row.id = company_name;						
+						row.id = company_name;		
+						//row.addEventListener("click", transferPage(), false);			
 						var cell = row.insertCell(0);
 						cell.id = company_name;
 						cell.innerHTML=c_name;
@@ -115,16 +120,10 @@
 						cell = row.insertCell(4);
 						cell.id = company_name;
 						cell.innerHTML=Math.floor(Math.random() * 100);
-					}).done(function() {
-						console.log("woohoo");
 					});
 				});
 
-				$("myTable").click(function() {
-					var id = $(this).attr('id');
-					console.log('clicking');
-					console.log(id);
-				});
+				
 
 					
 						/*$("tr").click(function(event) {
@@ -195,6 +194,31 @@
 
 			<!--Script enabling user to use search bar to search for a company in database-->
 			<script>
+				function transferPage() {
+					console.log("hey");
+					/*var temp_name="";
+					var temp_id="";
+					if (id != "h") {
+						for (i=0; i<id.length; i++) {
+							if (id[i] != ' ') {
+								temp_name+=id[i];
+							} else if (id[i] == '_') {
+								break;
+							} else {
+								temp_name+='_'
+							} 
+						}
+
+						i++;
+						for (j=i; j<id.length; j++) {
+							temp_id += id[j];
+						}
+
+						url = '../company_index.html?name=' + temp_name + '?id=' + temp_id;
+						document.location.href = url;
+					}*/
+				}
+
 				function searchFunction() {
 				  // Declare variables 
 				  var input, filter, table, tr, td, i;
