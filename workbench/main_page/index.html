@@ -102,82 +102,21 @@
 						}
 						
 						//Inserting data into proper cells in each row
-
-						row.id = company_name;		
-						//row.addEventListener("click", transferPage(), false);			
+		
 						var cell = row.insertCell(0);
-						cell.id = company_name;
 						cell.innerHTML=c_name;
 						cell = row.insertCell(1);
-						cell.id = company_name;
 						cell.innerHTML=company["address"].toLowerCase();
 						cell = row.insertCell(2);
-						cell.id = company_name;
 						cell.innerHTML=company["city"].toLowerCase();
 						cell = row.insertCell(3);
-						cell.id = company_name;
 						cell.innerHTML=Math.floor(Math.random() * 50);
 						cell = row.insertCell(4);
-						cell.id = company_name;
 						cell.innerHTML=Math.floor(Math.random() * 100);
+
+						console.log(company);
 					});
 				});
-
-				
-
-					
-						/*$("tr").click(function(event) {
-						var id = event.target.id;
-						console.log("clicking!");
-						var temp_name="";
-						var temp_id="";
-						if (id != "h") {
-							for (i=0; i<id.length; i++) {
-								if (id[i] != ' ') {
-									temp_name+=id[i];
-								} else if (id[i] == '_') {
-									break;
-								} else {
-									temp_name+='_'
-								} 
-							}
-
-							i++;
-							for (j=i; j<id.length; j++) {
-								temp_id += id[j];
-							}
-
-							url = '../company_index.html?name=' + temp_name + '?id=' + temp_id;
-							document.location.href = url;
-						}
-					});*/
-					
-/*
-					//If a company element is clicked on, it transitions the page to company_example/index.html
-					$("tr").click(function(event) {
-						var id = event.target.id;
-						var temp_name="";
-						var temp_id="";
-						if (id != "h") {
-							for (i=0; i<id.length; i++) {
-								if (id[i] != ' ') {
-									temp_name+=id[i];
-								} else if (id[i] == '_') {
-									break;
-								} else {
-									temp_name+='_'
-								} 
-							}
-
-							i++;
-							for (j=i; j<id.length; j++) {
-								temp_id += id[j];
-							}
-
-							url = '../company_index.html?name=' + temp_name + '?id=' + temp_id;
-							document.location.href = url;
-						}
-					});*/
 
 				/*Need latitude and longitude for each business in order to put a marker on the map; below, we use static data of Chicago coordinates but ideally the map would be populated using a loop to contain markers with the latitude and longitude of the businesses being pulled above */
 				var marker = L.marker([41.8781, -87.6298]).addTo(mymap); 
@@ -194,31 +133,6 @@
 
 			<!--Script enabling user to use search bar to search for a company in database-->
 			<script>
-				function transferPage() {
-					console.log("hey");
-					/*var temp_name="";
-					var temp_id="";
-					if (id != "h") {
-						for (i=0; i<id.length; i++) {
-							if (id[i] != ' ') {
-								temp_name+=id[i];
-							} else if (id[i] == '_') {
-								break;
-							} else {
-								temp_name+='_'
-							} 
-						}
-
-						i++;
-						for (j=i; j<id.length; j++) {
-							temp_id += id[j];
-						}
-
-						url = '../company_index.html?name=' + temp_name + '?id=' + temp_id;
-						document.location.href = url;
-					}*/
-				}
-
 				function searchFunction() {
 				  // Declare variables 
 				  var input, filter, table, tr, td, i;
