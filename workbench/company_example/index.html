@@ -348,21 +348,15 @@
 					window.onload = function() {
 						var url = document.location.href,
 			        	params = url.split('=');
-			        	temp_name = params[1];
+			        	params = params[1].split('?')[0].split('%20');
+			        	console.log(params);
+			        	temp_name = "";
+			        	for (i=0; i<params.length; i++) {
+			        		temp_name += params[i] + " ";
+			        	}
 			        	temp_id = params[2];
 
-			        	var name = "";
-			        	for (i=0; i<temp_name.length; i++) {
-			        		if (temp_name[i] == '_') {
-			        			name += " ";
-			        		} else if (temp_name[i] == '?') {
-			        			break;
-			        		} else {
-			        			name += temp_name[i];
-			        		}
-			        	}
-
-			        	document.getElementById('company_name').innerHTML = name;
+			        	document.getElementById('company_name').innerHTML = temp_name;
 
 			        	$.ajax({
 							url: "http://35.194.27.33/api/" + temp_id,
