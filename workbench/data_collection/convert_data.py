@@ -33,6 +33,10 @@ if __name__ == '__main__':
     database = None
     with open('combined_data.json') as f:
         database = json.load(f)
-    database_glimpse = [get_subset(hv_id, data) for (hv_id, data) in database.items()]
-    with open('combined_data_glimpse.json', 'w') as f:
-        json.dump(database_glimpse, f)
+    # database_glimpse = [get_subset(hv_id, data) for (hv_id, data) in database.items()]
+    for hv_id in database.keys():
+        glimpse = get_subset(hv_id, database[hv_id])
+        database[hv_id]['glimpse'] = glimpse
+    with open('combined_data_with_glimpse.json', 'w') as f:
+        # json.dump(database_glimpse, f)
+        json.dump(database, f, indent=2)
