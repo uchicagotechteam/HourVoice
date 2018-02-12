@@ -315,13 +315,14 @@
 					window.onload = function() {
 						var url = document.location.href,
 			        	params = url.split('=');
+			        	temp_id = params[2];
 			        	params = params[1].split('?')[0].split('%20');
-			        	console.log(params);
 			        	temp_name = "";
 			        	for (i=0; i<params.length; i++) {
 			        		temp_name += params[i] + " ";
 			        	}
-			        	temp_id = params[2];
+			        	console.log(temp_id);
+			        	console.log(temp_name);
 
 			        	document.getElementById('company_name').innerHTML = temp_name;
 
