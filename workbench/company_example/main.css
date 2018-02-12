@@ -39,46 +39,18 @@ h5, h6          { font-weight: bolder }
 /*    header    */
 header{
     width: 100%;
-    height: 125px;
+    height: 150px;
 }
 header .company h2{
     float: left;
     color: #838181;
     font-family: "Helvetica";
     font-size: 50px;
-    margin-top: 40px;
 }
 
-header nav{
-    float: right;
-    margin-top: 57px;
-}
-
-
-header nav ul li{
-    list-style: none;
-    display: block;
-    float: left;
-    margin-left: 50px;
-}
-
-header nav ul li a{
-    text-decoration: none;  
-    font-family: "Helvetica";
-    font-size: 14px;
-
-    transition:all .2s linear;
-    -webkit-transition:all .2s linear;
-    -moz-transition:all .2s linear;
-    -o-transition:all .2s linear;
-}
-
-header.dark nav ul li a{  
-    color: #5d5d5d;
-}
-
-header.dark nav ul li a:hover{
-    color: #919191;
+#mapid { 
+    height: 300px;
+    width: 300px; 
 }
 
 #mapid { 
