@@ -330,10 +330,29 @@
 							type: "GET"
 						}).done(function(data) {
 							var food = data['food_inspection'];
-							document.getElementById('address').innerHTML = food.address + ", " + food.city + ", " + food.state + " " + food.zip;
-							document.getElementById('license-id').innerHTML = food.license_;
+							var address = food.address + ", " + food.city + ", " + food.state + " " + food.zip;
+							var license_id = food.license_;
+							var facility = food.facility_type;
+							var owner = data['glimpse'].owner;
+
+							if (address == "") {
+								address = "Not Available";
+							}
+							if (license_id == "") {
+								license_id = "Not Available";
+							}
+							if (facility == "") {
+								facility = "Not Available";
+							}
+							if (owner == "") {
+								owner = "Not Available";
+							}
+
+							document.getElementById('address').innerHTML = address;
+							document.getElementById('license-id').innerHTML = license_id;
 							document.getElementById('violations').innerHTML = food.violations.length;
-							document.getElementById('industry').innerHTML = food.facility_type;
+							document.getElementById('industry').innerHTML = facility;
+							document.getElementById('owner').innerHTML = owner;
 							var lat = Number(food.latitude);
 							var long = Number(food.longitude);
 
