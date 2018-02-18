@@ -303,6 +303,7 @@
 /* Using Jquery to modify 'company name' element with actual company name */
 					window.onload = function() {
 						var url = document.location.href,
+						//parsing url to get proper company name and id to call api with
 			        	params = url.split('=');
 			        	temp_id = params[2];
 			        	params = params[1].split('?')[0].split('%20');
@@ -310,11 +311,14 @@
 			        	for (i=0; i<params.length; i++) {
 			        		temp_name += params[i] + " ";
 			        	}
+			        	//id for api
 			        	console.log(temp_id);
+			        	//company name
 			        	console.log(temp_name);
 
 			        	document.getElementById('company_name').innerHTML = temp_name;
 
+			        	//pulling from api
 			        	$.ajax({
 							url: "http://35.194.27.33/api/" + temp_id,
 							type: "GET"
@@ -338,6 +342,7 @@
 								owner = "Not Available";
 							}
 
+							//using jquery to push into html
 							document.getElementById('address').innerHTML = address;
 							document.getElementById('license-id').innerHTML = license_id;
 							document.getElementById('violations').innerHTML = food.violations.length;
